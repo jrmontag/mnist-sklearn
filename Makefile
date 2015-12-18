@@ -10,11 +10,12 @@ CONVERT=convert-binary-data.py
 
 ##### Python details
 # choose your favorite system interpreter
-BASE_PY=python
+BASE_PY=python2.7
 # rename virtualenv if desired
 VENV=tmp-venv
-VPY=$(BASEDIR)/$(VENV)/bin
-PY=$(VENV)/bin/python
+# virtualenv-specific locations
+VBIN=$(BASEDIR)/$(VENV)/bin
+VPY=$(VBIN)/python
 
 
 
@@ -43,11 +44,11 @@ venv: $(VENV)/bin/activate
 
 $(VENV)/bin/activate: requirements.txt
 	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
-	$(VENV)/bin/pip install -Ur requirements.txt
-	touch $(VENV)/bin/activate
+	$(VBIN)/pip install -Ur requirements.txt
+	touch $(VBIN)/activate
 
 convert: venv 
-	[ ! -e $(DATADIR) ] || $(PY) $(BINDIR)/$(CONVERT)
+	[ ! -e $(DATADIR) ] || $(VPY) $(BINDIR)/$(CONVERT)
 
 
 everything: convert 
