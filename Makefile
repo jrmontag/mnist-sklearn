@@ -1,15 +1,21 @@
 # Josh Montague, 2015-12
 
-# commands
-VENV_ACT=/Users/jmontague/.virtualenvs/data-2.7-tw/bin/activate
-PY=python
-
 # locations
 BASEDIR=$(CURDIR)
 DATADIR=$(BASEDIR)/data
+BINDIR=$(BASEDIR)/bin
 
 # files
 CONVERT=convert-binary-data.py
+
+##### Python details
+# choose your favorite system interpreter
+BASE_PY=python
+# rename virtualenv if desired
+VENV=tmp-venv
+VPY=$(BASEDIR)/$(VENV)/bin
+PY=$(VENV)/bin/python
+
 
 
 # datetime
@@ -21,6 +27,7 @@ help:
 	@echo 'Makefile for reproducible analysis                                 '
 	@echo '                                                                   '
 	@echo 'Usage:                                                             '
+	@echo '   make venv             create local virtualenv for this project '
 	@echo '   make clean            remove all the generated data files       '
 	@echo '   make convert          convert the original binary data into numpy arrays  '
 	@echo '                                                                   '
@@ -30,25 +37,25 @@ help:
 clean:
 	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
    
-convert:
-	source $(VENV_ACT); \
-	[ ! -e $(DATADIR) ] || $(PY) $(BASEDIR)/$(CONVERT); \
-	deactivate
+
+
+venv: $(VENV)/bin/activate
+
+$(VENV)/bin/activate: requirements.txt
+	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
+	$(VENV)/bin/pip install -Ur requirements.txt
+	touch $(VENV)/bin/activate
+
+convert: venv 
+	[ ! -e $(DATADIR) ] || $(PY) $(BINDIR)/$(CONVERT)
+
+
+everything: convert 
 
 
 
 
 
 
-tmp-venv: tmp-venv/bin/activate
-tmp-venv/bin/activate: requirements.txt
-	virtualenv tmp-venv
-	tmp-venv/bin/pip install -Ur requirements.txt
-	touch tmp-venv/bin/activate
 
-
-
-
-
-
-.PHONY: venv clean convert 
+.PHONY: venv clean convert everything 

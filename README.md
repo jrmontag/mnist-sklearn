@@ -28,13 +28,14 @@ Kick-off meeting to review project definition
     - [this (old) post](https://robertdragan.wordpress.com/2012/08/31/comparying-various-methods-for-saving-and-loading-numpy-arrays/) shows that joblib/hdf5/numpy are all about the same in performance. joblib looks to win, slightly, and is recommended in the scikit-learn docs. so, use that one.
         - this seems to pertain more to the models that carry large arrays within them. 
     - stick to .npy arrays from original data, and clean up that code 
-
-
-- [] improve virtualenv setup
+- [x] improve virtualenv setup
+    - get virtualenv incorporated with existing conversion script 
+    - can now ``make everything`` from scratch!
 
 
 
 - [] take model + pipeline out of notebook
+
 
 - [] build funcs to read and display example images
 
