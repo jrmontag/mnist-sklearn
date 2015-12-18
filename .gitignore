@@ -4,6 +4,7 @@
 *.gz
 *.swp
 *.npy
+*.submission
 
 
 ### Python ###
