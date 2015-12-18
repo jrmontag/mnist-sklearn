@@ -3,6 +3,7 @@
 ### data + misc ###
 *.gz
 *.swp
+*.npy
 
 
 ### Python ###
@@ -10,6 +11,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+# IPython checkpoints
+.ipynb_checkpoints
 
 # C extensions
 *.so

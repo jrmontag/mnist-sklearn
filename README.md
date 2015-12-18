@@ -13,9 +13,19 @@
 
 - [x] read some scikit examples 
 
-- [] copy the given images code into lab, translate into importable module
+- [] copy the given images code into lab, create numpy arrays 
     - because of some differences in fileInput in the 3.4 interpreter, reverting back to 2.7 
     - able to run images.py as given
+    - work on getting the arrays out into np arrays => write to file for easy import later
+        - joblib (compressed) [link](https://pythonhosted.org/joblib/persistence.html)
+        - HDF5 (groups) [link](http://docs.h5py.org/en/latest/quick.html#appendix-creating-a-file)
+
+        - note: takes ~30s to read original data into np array
+
+
+- [] look at using joblib hdf5 
+
+
 
 - [] build funcs to read and display example images
 
