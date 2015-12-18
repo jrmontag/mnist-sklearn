@@ -1,6 +1,7 @@
 # Josh Montague, 2015-12
 
 # commands
+VENV_ACT=/Users/jmontague/.virtualenvs/data-2.7-tw/bin/activate
 PY=python
 
 # locations
@@ -8,7 +9,8 @@ BASEDIR=$(CURDIR)
 DATADIR=$(BASEDIR)/data
 
 # files
-HDF5_FILE=$(DATADIR)/data.hdf5
+CONVERT=convert-binary-data.py
+
 
 # datetime
 #DATE := $(shell date +'%Y-%m-%d %H:%M:%S')
@@ -19,22 +21,34 @@ help:
 	@echo 'Makefile for reproducible analysis                                 '
 	@echo '                                                                   '
 	@echo 'Usage:                                                             '
-	@echo '   make venv             create a new virtualenv for this work     '
 	@echo '   make clean            remove all the generated data files       '
 	@echo '   make convert          convert the original binary data into numpy arrays  '
 	@echo '                                                                   '
 	@echo '                                                                   '
 
 
-venv:
-	@echo '...WIP...'
- 
 clean:
 	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
    
 convert:
-	@echo '...WIP...'
-	#[ ! -e $(HDF5_FILE) ] || $(PY) $(BASEDIR)/image.py 
+	source $(VENV_ACT); \
+	[ ! -e $(DATADIR) ] || $(PY) $(BASEDIR)/$(CONVERT); \
+	deactivate
+
+
+
+
+
+
+tmp-venv: tmp-venv/bin/activate
+tmp-venv/bin/activate: requirements.txt
+	virtualenv tmp-venv
+	tmp-venv/bin/pip install -Ur requirements.txt
+	touch tmp-venv/bin/activate
+
+
+
+
 
 
 .PHONY: venv clean convert 
