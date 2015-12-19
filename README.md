@@ -31,29 +31,59 @@ Kick-off meeting to review project definition
 - [x] improve virtualenv setup
     - get virtualenv incorporated with existing conversion script 
     - can now ``make everything`` from scratch!
+- [x] use basic SVM in notebook (memory of this being good baseline for MNIST)
+- [x] move utils code out of notebook 
+    - data reading, submissions creation
+    -  fix import paths for bin/
+- [x] build diagnostics (to save with each model)
+    - scoring (accuracy + stdev) 
+    - ``cross_val_predict`` + confusion matrix 
 
 
 
-- [] take model + pipeline out of notebook
+- [] per-experiment executables
+    - loop over CV test of: scaling v. no scaling X every default classifier 
+    - then train the winner on all training data  => predict + submission
+
+
+
+
+- [] gridsearch the best performers from ^ 
+
+- [] ensemble methods for best gridsearch'd settings of ^
 
 
 - [] build funcs to read and display example images
 
-- [] move from ipynb => executables asap 
+- [] strongest features + adjust probabilities of assignment based on answer key? 
+
 
 - [] start building models 
     - interactive single model
     - end-to-end, executable single model (read, process, model, predict, write)
-    - consider preprocessing approaches
     - loop through default settings of [all of these](http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html)
     - choose a couple to gridsearch (or similar)
+    - consider preprocessing approaches 
+        - scikit's preprocessing module (zero mean, unit variance)
+        - minmax scalar 
     - try ensemble methods
     - some approaches in [this writeup](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)
     - try NN, convnets?
 
+
+# TODO
+
+- move first two experiments into py executables (out of notebooks) 
+- fix make dependencies (don't re-create .npy files if not needed)
+- add mpl backend change to makefile 
+
+
 - [] other things to try:
-    - MDS / tSNE + kNN [via](http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#example-manifold-plot-lle-digits-py)
+    - visualization? 
+        - MDS / tSNE + kNN [via](http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#example-manifold-plot-lle-digits-py)
     - ``metrics.confusion_matrix``
+    - feature scaling? is there a reason to scale 0-256 down to 0-1? 
+    - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
 
 ------------
 
