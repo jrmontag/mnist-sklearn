@@ -28,31 +28,33 @@ help:
 	@echo 'Makefile for reproducible analysis                                 '
 	@echo '                                                                   '
 	@echo 'Usage:                                                             '
-	@echo '   make venv             create local virtualenv for this project '
-	@echo '   make clean            remove all the generated data files       '
+	@echo '   make everything       build entire project, end-to-end        '
 	@echo '   make convert          convert the original binary data into numpy arrays  '
+	@echo '   make venv             create local virtualenv for this project '
 	@echo '                                                                   '
+	@echo '   make clean            remove all the generated data files       '
 	@echo '                                                                   '
 
 
-clean:
-	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
-   
+everything: convert 
+
+
+convert: venv 
+	[ ! -e $(DATADIR)/\*-images.npy ] || $(VPY) $(BINDIR)/$(CONVERT)
 
 
 venv: $(VENV)/bin/activate
+
 
 $(VENV)/bin/activate: requirements.txt
 	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
 	$(VBIN)/pip install -Ur requirements.txt
 	touch $(VBIN)/activate
 
-convert: venv 
-	[ ! -e $(DATADIR) ] || $(VPY) $(BINDIR)/$(CONVERT)
 
-
-everything: convert 
-
+clean:
+	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
+   
 
 
 
