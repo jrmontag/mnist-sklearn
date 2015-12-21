@@ -3,7 +3,7 @@
 # locations
 BASEDIR=$(CURDIR)
 DATADIR=$(BASEDIR)/data
-BINDIR=$(BASEDIR)/bin
+#BINDIR=$(BASEDIR)/bin
 
 # files
 CONVERT=convert-binary-data.py
@@ -40,7 +40,8 @@ everything: convert
 
 
 convert: venv 
-	[ ! -e $(DATADIR)/\*-images.npy ] || $(VPY) $(BINDIR)/$(CONVERT)
+	#[ ! -e $(DATADIR)/\*-images.npy ] || $(VPY) $(CONVERT)
+	test -e $(DATADIR)/\*-images.npy || $(VPY) $(CONVERT)
 
 
 venv: $(VENV)/bin/activate

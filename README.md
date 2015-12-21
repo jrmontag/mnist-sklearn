@@ -38,13 +38,20 @@ Kick-off meeting to review project definition
 - [x] build diagnostics (to save with each model)
     - scoring (accuracy + stdev) 
     - ``cross_val_predict`` + confusion matrix 
+- [x] per-experiment executables
+    - create python module that defines the list of models, steps 
+        - use eg ``experiment-1.py`` to read that in and execute from bash 
+    - include saving model, logging, saving confusion matrix 
 
 
 
-- [] per-experiment executables
-    - loop over CV test of: scaling v. no scaling X every default classifier 
+- [] next round of experiments
+    - loop over: scaling v. no scaling X every default classifier 
     - then train the winner on all training data  => predict + submission
 
+
+
+- [] if too slow, can we fit a linear model and look at the relative importance of features 
 
 
 
@@ -52,6 +59,7 @@ Kick-off meeting to review project definition
 
 - [] ensemble methods for best gridsearch'd settings of ^
 
+- [] plan to refit best model(s) on entire training dataset before making predictions 
 
 - [] build funcs to read and display example images
 
@@ -70,11 +78,19 @@ Kick-off meeting to review project definition
     - some approaches in [this writeup](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)
     - try NN, convnets?
 
+## results
+
+[Submission date] Classifier/Pipeline: training accuracy (leaderboard accuracy)
+
+    - [ 2015-12-18 ] DummyClassifier (random guessing) ['Crash Test Dummies']: 10% (10%)
+    - [ 2015-12-19 ] Linear SVM (default settings) ['Grapevine']: 86% (79%) **interesting that the leaderboard score is that much lower** 
+    - [ 2015-12-20 ] Scaling + Linear SVM DummyClassifier [Tall To Ride]: 91% (N/A)
+    
+
+
 
 # TODO
 
-- move first two experiments into py executables (out of notebooks) 
-- fix make dependencies (don't re-create .npy files if not needed)
 - add mpl backend change to makefile 
 
 

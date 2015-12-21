@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
 # 
-# original by Scott Hendrickson, modified and extended by Josh Montague 
+# original by Scott Hendrickson, modified by Josh Montague 
 #
 
 import fileinput
@@ -14,13 +13,17 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s',
                     level=logging.INFO
                     )
 
+
+logging.info('Beginning data conversion')
+
 # display ascii versions of training data 
 PLOT = False 
+logging.info('ASCII plotting enabled? {}'.format(PLOT))
+
 
 ######### 
 # Get the training labels 
 ######### 
-
 logging.info("reading training labels")
 label_names = ["data/original/train-labels.gz"]
 g = fileinput.FileInput(label_names, openhook=fileinput.hook_compressed)
