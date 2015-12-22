@@ -7,7 +7,6 @@
 # vars
 VENV=tmp-venv
 PY=${VENV}/bin/python
-
 # manual work-around for ubuntu
 PY=python
 
@@ -38,11 +37,11 @@ SLEEPTIME=60
 
 echo "$(date +%Y-%m-%d\ %H:%M:%S) -- started running $0"
 
-filedate=$(date %Y-%m-%dT%H:%M:%S)
+filedate="$(date +%Y-%m-%dT%H:%M:%S)"
 
 for i in ${SEQUENCE}; do
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- launching experiment ${i}"
-    nohup nice ${PY} ${SCRIPT} expt_${i} ${ARGS} > log/${filedate}_expt_${i}.log & 
+    nohup ${NICE} ${PY} ${SCRIPT} expt_${i} ${ARGS} > log/${filedate}_expt_${i}.log & 
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- sleeping for ${SLEEPTIME} seconds"
     sleep ${SLEEPTIME} 
 done
