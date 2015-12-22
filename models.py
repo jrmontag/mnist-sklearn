@@ -33,19 +33,19 @@ experiment_dict = \
         },
 
     'expt_2': { 
-        'note': 'vanilla linear svm',
-        'name': '(Heard it through the) grapevine',
+        'note': 'vanilla linear svm (heard it through the grapevine)',
+        'name': 'Grapevine',
         'pl': Pipeline([ ('linear_svm', SGDClassifier(n_jobs=-1)) ]) 
         },
     'expt_3': { 
-        'note': 'add scaling prior to SVM',
-        'name': '(You must be) this tall to ride',
+        'note': 'add scaling prior to SVM (you must be this tall to ride)',
+        'name': 'This tall to ride',
         'pl': Pipeline([ ('scaling', StandardScaler()), ('linear_svm', SGDClassifier(n_jobs=-1)) ]) 
         },
     # systematic check of all classifiers + scaling
     'expt_4': { 
-        'note': 'vanilla knn',
-        'name': 'vanilla knn',
+        'note': 'vanilla knn (mac and kelly from 2014 "neighbors"',
+        'name': 'Mac and Kelly',
         'pl': Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1)) ]) 
         },
     'expt_5': { 
@@ -54,8 +54,8 @@ experiment_dict = \
         'pl': Pipeline([ ('scaling', StandardScaler()), ('knn', KNeighborsClassifier(n_jobs=-1)) ]) 
         },
     'expt_6': { 
-        'note': 'rbf kernel SVM',
-        'name': 'rbf kernel SVM', 
+        'note': 'rbf kernel SVM', 
+        'name': 'Popcorn machine',
         'pl': Pipeline([ ('rbf-svm', SVC(kernel='rbf')) ]) 
         },
     'expt_7': { 

@@ -4,9 +4,12 @@
 *.gz
 *.swp
 *.npy
+*.npy.z
 *.submission
 *.pdf
 *.pkl
+*.log
+*.out
 
 
 ### Python ###

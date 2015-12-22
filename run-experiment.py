@@ -9,9 +9,7 @@ import logging
 import os
 import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sb
 from sklearn.externals import joblib
 from sklearn.cross_validation import cross_val_score, cross_val_predict, train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -22,15 +20,19 @@ import utils
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('expt', help='specify experiment to run (see README)', 
-                    choices=['expt_1', 'expt_2', 'expt_3', 'expt_4', \
-                        'expt_5', 'expt_6', 'expt_7', 'expt_8', 'expt_9', \
-                        'expt_10', 'expt_11', 'expt_12', 'expt_13', \
-                        'expt_14', 'expt_15', 'expt_16', 'expt_17', \
-                        'expt_18', 'expt_19', 'expt_20'])
+parser.add_argument('expt', help='specify experiment to run (see README)')
+parser.add_argument('--ubuntu', action='store_true',
+                    help='modify imports if running on ubuntu')
 parser.add_argument('-v', '--verbose', action='store_true',
                     help='increase output verbosity')
 args = parser.parse_args()
+
+# ubuntu v. os x shenanigans
+if args.ubuntu:
+    import matplotlib
+    matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sb
 
 
 # use a simple logger - get the level from the cmd line
@@ -78,12 +80,11 @@ model_name = utils.short_name(pipeline) + \
 logging.info('writing fit pipeline to disk as {}'.format(model_name)) 
 joblib.dump(pipeline, os.path.join('saved_models', model_name) + '.pkl', compress=3)
 
+
 # cv for accuracy 
-#
-# this gives a better idea of uncertainty, but it adds 'cv' more
-#   fits of the model - hold onto it for later 
-#
 cv = 3
+# this gives a better idea of uncertainty, but it adds 'cv' more
+#   fits of the model 
 logging.info('cross validating model accuracy with cv={}'.format(cv))
 scores = cross_val_score(pipeline, X_test, y_test, cv=cv) 
 logging.info('obtained accuracy={:0.2f}% +/- {:0.2f} with cv={}, \
@@ -105,7 +106,7 @@ logging.info('obtained accuracy = {:.2f}% with cv={}, pipeline={} '.format(
 # > TODO: move this figure creation into utils + add cv accuracy to title) <
 logging.info('calculating confusion matrix')
 sb.heatmap(confusion_matrix(y_test, predictions))
-plt.title(model_name + ' ({:.2f}%)'.format(scores.mean()*100))
+plt.title(model_name + ' [expt] ({:.2f}%)'.format(scores.mean()*100))
 plt.xlabel("True") 
 plt.ylabel("Pred")
 #plt.tight_layout()

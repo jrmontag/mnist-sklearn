@@ -44,27 +44,36 @@ Kick-off meeting to review project definition
     - include saving model, logging, saving confusion matrix 
 
 
-
 - [] next round of experiments
     - loop over: scaling v. no scaling X every default classifier 
-    - then train the winner on all training data  => predict + submission
-
-
-
-- [] if too slow, can we fit a linear model and look at the relative importance of features 
+    - summarize results (``$ cat log/*.log | grep "+/-" | cut -d"=" -f2,5- | sort -nr``):
+        - k-NN (96.61%)
+        - scaled rbf SVM (95.76%)
+        - scaled RF (93.67%)
+        - scaled k-NN (93.65%)
+        - RF (93.59%)
+    - train the top two (kNN + rbf SVM) on all training data  => predict + submission
+        - make another python utility that takes the experiment pipeline (from models.py) and creates a submission file 
+    - the kNN is pretty fast, but the rbf SVM takes a while train/predict
 
 
 
 - [] gridsearch the best performers from ^ 
 
-- [] ensemble methods for best gridsearch'd settings of ^
 
-- [] plan to refit best model(s) on entire training dataset before making predictions 
+
+
+
+- [] ensemble methods for best gridsearch'd settings of ^
+    - [VotingClassifer](http://scikit-learn.org/stable/modules/ensemble.html#voting-classifier) can also be gridsearched for component classifier settings 
+
+
+
+- [] strongest features + **adjust probabilities of assignment based on leaderboard observations** 
 
 - [] build funcs to read and display example images
 
-- [] strongest features + adjust probabilities of assignment based on answer key? 
-
+- [] if too slow, can we fit a linear model and look at the relative importance of features 
 
 - [] start building models 
     - interactive single model
