@@ -11,26 +11,23 @@ PY=${VENV}/bin/python
 PY=python
 
 # broad survey of classifiers 
-SEQUENCE=`seq 4 21`
+#SEQUENCE=`seq 4 21`
 # broad survey of classifiers 
-#SEQUENCE="4 6"
+SEQUENCE="7"
 
 # experiments or submissions?
-SCRIPT=run-experiment.py
-#SCRIPT=full-train-and-predict.py
+#SCRIPT=run-experiment.py
+SCRIPT=full-train-and-predict.py
 
 # for experiments
-NICE="nice 15"
+#NICE="nice 15"
 # for submissions
 NICE="nice"
 
-# survey (plotting)
+# experiments (+plotting)
 #ARGS='--verbose --ubuntu'
 # submission
 ARGS='--verbose'
-
-# kNN model: expt_4
-# SVM mode: expt_6
 
 SLEEPTIME=60
 
