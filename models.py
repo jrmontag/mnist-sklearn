@@ -55,13 +55,13 @@ experiment_dict = \
         },
     'expt_6': { 
         'note': 'rbf kernel SVM', 
-        'name': 'Popcorn machine',
+        'name': 'rbf kernel SVM', 
         'pl': Pipeline([ ('rbf-svm', SVC(kernel='rbf')) ]) 
         },
     'expt_7': { 
         'note': 'scaled rbf kernel SVM',
-        'name': 'scaled rbf kernel SVM', 
-        'pl': Pipeline([ ('scaling', StandardScaler()), ('rbf-svm', SVC(kernel='rbf')) ]) 
+        'name': 'Portable popcorn machine',
+        'pl': Pipeline([ ('scaling', StandardScaler()), ('rbf-svm', SVC(kernel='rbf', cache_size=1000)) ]) 
         },
     'expt_8': { 
         'note': 'default decision tree',
