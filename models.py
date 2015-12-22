@@ -12,7 +12,8 @@ import sys
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.linear_model import SGDClassifier 
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
@@ -132,8 +133,47 @@ experiment_dict = \
         'note': 'scaled QDA',
         'name': 'scaled QDA',
         'pl': Pipeline([ ('scaling', StandardScaler()), ('Quadratic-da', QuadraticDiscriminantAnalysis()) ]) 
+        },
+    'expt_22': { 
+        'note': 'default (multi-class) Logistic regression',
+        'name': 'default (multi-class) Logistic regression',
+        'pl': Pipeline([ ('log-reg', LogisticRegression(n_jobs=-1)) ]) 
+        },
+    'expt_23': { 
+        'note': 'scaled default (multi-class) Logistic regression',
+        'name': 'scaled default (multi-class) Logistic regression',
+        'pl': Pipeline([ ('scaling', StandardScaler()), ('log-reg', LogisticRegression(n_jobs=-1)) ]) 
+        },
+    # gridsearch cv the best performers from above
+    # kNN
+    'expt_24': { 
+        'note': 'gridsearch cv on kNN',
+        'name': 'gridsearch cv on kNN',
+        'pl': GridSearchCV( Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1)) ]), 
+                param_grid=dict(knn__n_neighbors=[3,12,20]) ) 
+        },
+    # scaled rbf SVM
+    'expt_25': { 
+        'note': 'gridsearch cv on scaled rbf svm',
+        'name': 'gridsearch cv on scaled rbf svm',
+        'pl': GridSearchCV( Pipeline([ ('scaling', StandardScaler()), 
+                                        ('rbf_svm', SVC(kernel='rbf', cache_size=1000)) ]),
+                            param_grid=dict(rbf_svm__C=[0.1,1.0,10], 
+                                            rbf_svm__gamma=[0.0001,0.01,0.1],
+                                            rbf_svm__class_weight=[None, 'balanced']
+                                            )) 
+        },
+    # scaled RF
+    'expt_26': { 
+        'note': 'gridsearch cv on scaled default RF',
+        'name': 'gridsearch cv on scaled default RF',
+        'pl': GridSearchCV( Pipeline([ ('scaling', StandardScaler()), 
+                                        ('random_forest', RandomForestClassifier(n_jobs=-1)) ]), 
+                            param_grid=dict(random_forest__n_estimators=[3,50,100],
+                                            random_forest__max_features=[10,100,1000]
+                                            ))
         }
-
+    # next?
     }
 
 
