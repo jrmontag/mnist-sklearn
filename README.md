@@ -52,9 +52,13 @@ Kick-off meeting to review project definition
         - scaled RF (93.67%)
         - scaled k-NN (93.65%)
         - RF (93.59%)
-    - train the top two (kNN + rbf SVM) on all training data  => predict + submission
+    - train the top two (kNN [expt4] + scaled rbf SVM [expt7]) on all training data  => predict + submission
         - make another python utility that takes the experiment pipeline (from models.py) and creates a submission file 
     - the kNN is pretty fast, but the rbf SVM takes a while train/predict
+        - also ran the wrong model (expt6); killed and running expt7 now
+        - submitted kNN (Mac & Kelly)
+        - _____ submitted scaled rbf SVM (compact popcorn machine)
+
 
 
 
