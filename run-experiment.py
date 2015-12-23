@@ -72,6 +72,14 @@ logging.debug('dataset sizes (xtrain, xtest, ytrain, ytest)={}'.format(
 # fit
 logging.info('fitting experiment pipeline with signature={}'.format(pipeline)) 
 pipeline.fit(X_train, y_train)
+# if this was a gridsearch, log the combinations (and call out the winner) 
+if hasattr(pipeline, 'best_params_'):
+    logging.info('best gridsearch score={}, best set of pipeline params = {}'.format(
+                                                                                pipeline.best_score_, 
+                                                                                pipeline.best_params_)) 
+    logging.info('now displaying all pipeline param scores')
+    for params, mean_score, scores in pipeline.grid_scores_:
+        logging.info("{:0.3f} (+/-{:0.03f}) for {}".format(mean_score, scores.std() * 2, params))
 
 # store the train/split version 
 model_name = utils.short_name(pipeline) + \
@@ -80,30 +88,37 @@ model_name = utils.short_name(pipeline) + \
 logging.info('writing fit pipeline to disk as {}'.format(model_name)) 
 joblib.dump(pipeline, os.path.join('saved_models', model_name) + '.pkl', compress=3)
 
+# if we used a gridsearch, this is simple 
+if hasattr(pipeline, 'best_params_'):
+    logging.info('predicting test values with best-choice gridsearch params')
+    # fake an array of CV scores to play nice with plot formatting later 
+    scores = np.array([pipeline.best_score_])
+    predictions = pipeline.predict(X_test) 
+else:
+    # otherwise, run a cross-validation for test accuracy
+    # cv for accuracy 
+    cv = 3
+    # this gives a better idea of uncertainty, but it adds 'cv' more
+    #   fits of the model 
+    logging.info('cross validating model accuracy with cv={}'.format(cv))
+    scores = cross_val_score(pipeline, X_test, y_test, cv=cv) 
+    logging.info('obtained accuracy={:0.2f}% +/- {:0.2f} with cv={}, \
+                    pipeline={} '.format(scores.mean()*100, 
+                                        scores.std()*100*2, 
+                                        cv, 
+                                        pipeline))
 
-# cv for accuracy 
-cv = 3
-# this gives a better idea of uncertainty, but it adds 'cv' more
-#   fits of the model 
-logging.info('cross validating model accuracy with cv={}'.format(cv))
-scores = cross_val_score(pipeline, X_test, y_test, cv=cv) 
-logging.info('obtained accuracy={:0.2f}% +/- {:0.2f} with cv={}, \
-                pipeline={} '.format(scores.mean()*100, 
-                                    scores.std()*100*2, 
-                                    cv, 
-                                    pipeline))
-
-# cv for predictions 
-logging.info('cross validating model predictions with cv={}'.format(cv))
-predictions = cross_val_predict(pipeline, X_test, y_test, cv=cv)
-logging.info('obtained accuracy = {:.2f}% with cv={}, pipeline={} '.format(
-                                        accuracy_score(y_test,predictions)*100,
-                                        cv,
-                                        pipeline
-                                        )) 
+    # cv for predictions 
+    logging.info('cross validating model predictions with cv={}'.format(cv))
+    predictions = cross_val_predict(pipeline, X_test, y_test, cv=cv)
+    logging.info('obtained accuracy = {:.2f}% with cv={}, pipeline={} '.format(
+                                            accuracy_score(y_test,predictions)*100,
+                                            cv,
+                                            pipeline
+                                            )) 
 
 # create confusion matrix + save figure 
-# > TODO: move this figure creation into utils + add cv accuracy to title) <
+# > TODO: move this figure creation into utils <
 logging.info('calculating confusion matrix')
 sb.heatmap(confusion_matrix(y_test, predictions))
 plt.title(model_name + ' [expt] ({:.2f}%)'.format(scores.mean()*100))
