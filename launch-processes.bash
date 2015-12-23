@@ -12,22 +12,22 @@ PY=python
 
 # broad survey of classifiers 
 #SEQUENCE=`seq 4 21`
-# broad survey of classifiers 
-SEQUENCE="7"
+# other pairs 
+SEQUENCE=`seq 24 26`
 
 # experiments or submissions?
-#SCRIPT=run-experiment.py
-SCRIPT=full-train-and-predict.py
+SCRIPT=run-experiment.py
+#SCRIPT=full-train-and-predict.py
 
 # for experiments
-#NICE="nice 15"
+NICE="nice -n15"
 # for submissions
-NICE="nice"
+#NICE="nice"
 
 # experiments (+plotting)
-#ARGS='--verbose --ubuntu'
+ARGS='--verbose --ubuntu'
 # submission
-ARGS='--verbose'
+#ARGS='--verbose'
 
 SLEEPTIME=60
 

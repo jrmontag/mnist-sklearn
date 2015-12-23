@@ -57,18 +57,30 @@ Kick-off meeting to review project definition
     - the kNN is pretty fast, but the rbf SVM takes a while train/predict
         - also ran the wrong model (expt6); killed and running expt7 now
         - submitted kNN (Mac & Kelly)
-        - _____ submitted scaled rbf SVM (compact popcorn machine)
+        - submitted scaled rbf SVM (compact popcorn machine)
+    - didn't include multi-class LR (scaled and not) in initial experiment -- do that now 
+        - not stellar, ~90%
+
+
+- [] gridsearch (first level) the best performers from ^ 
+    - gridsearchcv the top three performers above (kNN, scaled rbf SVM, scaled RF)
+        - need to find reasonable params for each model
+    - update any code that relies on on pipeline (instead of gscv) 
+    - best gridsearch kNN had ~95%, lower than with default settings
+    - killed and restarted a few times with attempts to boost efficiency
+        - these are expts 24-26 
 
 
 
 
-- [] gridsearch the best performers from ^ 
+
+- [] gridsearch (second level) 
+    - then fit each of those with the full data + submit best/both 
 
 
 
 
-
-- [] ensemble methods for best gridsearch'd settings of ^
+- [] ensemble methods with gridsearch'd models above 
     - [VotingClassifer](http://scikit-learn.org/stable/modules/ensemble.html#voting-classifier) can also be gridsearched for component classifier settings 
 
 
