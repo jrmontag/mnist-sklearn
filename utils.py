@@ -13,12 +13,18 @@ import os
 import sys
 
 
-def short_name(pipeline):
-    """Return the simplified name of this model."""
-    # for a single model, this works
-    #return model.__class__.__name__
-    # for a pipeline, we need a nice string version of the steps
-    return '-'.join( [ pair[0] for pair in pipeline.steps ] )
+def short_name(model):
+    """Return a simplified name for this model. A bit brittle."""
+    if hasattr(model, 'steps'):
+        # pipeline
+        name = '-'.join( [ pair[0] for pair in model.steps ] )
+    elif hasattr(model, 'best_estimator_'):
+        # gridsearchcv
+        name = 'gscv_' + '-'.join( [x[0] for x in model.estimator.steps ])
+    else:
+        # for a single model, this will work
+        name = model.__class__.__name__
+    return name 
 
 
 def create_submission(predictions, sub_name, comment=None, team='DrJ'):
