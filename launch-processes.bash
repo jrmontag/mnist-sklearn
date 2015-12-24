@@ -10,14 +10,13 @@ PY=${VENV}/bin/python
 # manual work-around for ubuntu
 PY=python
 
-# broad survey of classifiers 
-#SEQUENCE=`seq 4 21`
-# other pairs 
-SEQUENCE=`seq 24 26`
+# range of experiments to run 
+#SEQUENCE=`seq 27 29`
+SEQUENCE=32
 
 # experiments or submissions?
-SCRIPT=run-experiment.py
-#SCRIPT=full-train-and-predict.py
+#SCRIPT=run-experiment.py
+SCRIPT=full-train-and-predict.py
 
 # for experiments
 NICE="nice -n15"
@@ -29,7 +28,8 @@ ARGS='--verbose --ubuntu'
 # submission
 #ARGS='--verbose'
 
-SLEEPTIME=60
+# stagger the workload 
+SLEEPTIME=300
 
 
 echo "$(date +%Y-%m-%d\ %H:%M:%S) -- started running $0"
@@ -44,4 +44,5 @@ for i in ${SEQUENCE}; do
 done
 
 echo "$(date +%Y-%m-%d\ %H:%M:%S) -- finished launching experiments"
+
 
