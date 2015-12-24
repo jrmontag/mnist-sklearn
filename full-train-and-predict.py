@@ -20,6 +20,8 @@ import utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument('expt', help='specify experiment to run (see README)')
+parser.add_argument('--ubuntu', action='store_true',
+                    help='modify imports if running on ubuntu')
 parser.add_argument('-v', '--verbose', action='store_true',
                     help='increase output verbosity')
 args = parser.parse_args()
