@@ -1,6 +1,7 @@
-2015-12-16 
+# CCC, 2015 edition
 
-Kick-off meeting to review project definition
+
+2015-12-16, kick-off meeting to review project definition
 
 - submission format (see "random" example, too): 
 
@@ -42,9 +43,7 @@ Kick-off meeting to review project definition
     - create python module that defines the list of models, steps 
         - use eg ``experiment-1.py`` to read that in and execute from bash 
     - include saving model, logging, saving confusion matrix 
-
-
-- [] next round of experiments
+- [x] next round of experiments
     - loop over: scaling v. no scaling X every default classifier 
     - summarize results (``$ cat log/*.log | grep "+/-" | cut -d"=" -f2,5- | sort -nr``):
         - k-NN (96.61%)
@@ -60,28 +59,37 @@ Kick-off meeting to review project definition
         - submitted scaled rbf SVM (compact popcorn machine)
     - didn't include multi-class LR (scaled and not) in initial experiment -- do that now 
         - not stellar, ~90%
-
-
-- [] gridsearch (first level) the best performers from ^ 
+- [x] gridsearch (first level) the best performers from ^ 
     - gridsearchcv the top three performers above (kNN, scaled rbf SVM, scaled RF)
         - need to find reasonable params for each model
     - update any code that relies on on pipeline (instead of gscv) 
     - best gridsearch kNN had ~95%, lower than with default settings
     - killed and restarted a few times with attempts to boost efficiency
-        - these are expts 24-26 
+        - these are expts 24-26. best results: 
+        - kNN ~ 95% ({'knn__n_neighbors': 3}) 
+            - default k=10 (was 96.6%)
+        - SVM ~ 93% ({'rbf_svm__C': 10, 'rbf_svm__gamma': 0.0001, 'rbf_svm__class_weight': 'balanced'} [tie w/ c_w=None]) 
+            - default C=1, gamma='auto' (1/n_features ~ 0.008), classweight=None 
+        - RF ~ 94% ({'random_forest__n_estimators': 100, 'random_forest__max_features': 'auto'})  
+            - default n_estimators=10, max_features='auto'
+- [x] gridsearch (second level) 
+    - focus ranges around blend of "default" and last GS best performance 
+        - these are expts 27-29; check logs for best
+        - kNN: ~95%. k=3-5, all similar, weight='distance'; {'knn__weights': 'distance', 'knn__n_neighbors': 4}
+        - SVM: ~95%. C=10, gamma=0.001/auto, similar; {'rbf_svm__C': 10, 'rbf_svm__gamma': 'auto', 'rbf_svm__class_weight': 'balanced'}
+        - RF: ~95%. {'random_forest__n_estimators': 500, 'random_forest__max_features': 'auto'}
+    - once these are fit, submit one or more
+        - train RF on everything (expt 32), submit results 
 
 
-
-
-
-- [] gridsearch (second level) 
-    - then fit each of those with the full data + submit best/both 
-
-
+- [] intermission to clean up repo & file structure
 
 
 - [] ensemble methods with gridsearch'd models above 
     - [VotingClassifer](http://scikit-learn.org/stable/modules/ensemble.html#voting-classifier) can also be gridsearched for component classifier settings 
+
+
+- [] set ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
 
 
 
