@@ -179,18 +179,18 @@ experiment_dict = \
         'note': 'focused gridsearch cv on kNN',
         'name': 'focused gridsearch cv on kNN',
         'pl': GridSearchCV( Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1)) ]), 
-                            param_grid=dict(knn__n_neighbors=range(2,11), 
+                            param_grid=dict(knn__n_neighbors=range(2,12), 
                                             knn__weights=['distance','uniform']), 
                             n_jobs=-1 ) 
         },
-    # - scaled rbf SVM      # *TODO* fill out gridsearch grid for below models
+    # - scaled rbf SVM      
     'expt_28': { 
         'note': 'focussed gridsearch cv on scaled rbf svm',
         'name': 'focussed gridsearch cv on scaled rbf svm',
         'pl': GridSearchCV( Pipeline([ ('scaling', StandardScaler()), 
-                                        ('rbf_svm', SVC(kernel='rbf', cache_size=1000)) ]),
-                            param_grid=dict(rbf_svm__C=[0.1,1.0,10], 
-                                            rbf_svm__gamma=[0.0001,0.01,0.1],
+                                        ('rbf_svm', SVC(kernel='rbf', cache_size=2000)) ]),
+                            param_grid=dict(rbf_svm__C=[1,2,5,10], 
+                                            rbf_svm__gamma=[0.001,0.005,0.01,'auto'],
                                             rbf_svm__class_weight=[None, 'balanced']),
                             n_jobs=-1) 
         },
@@ -200,13 +200,42 @@ experiment_dict = \
         'name': 'focussed gridsearch cv on scaled default RF',
         'pl': GridSearchCV( Pipeline([ ('scaling', StandardScaler()), 
                                         ('random_forest', RandomForestClassifier(n_jobs=-1)) ]), 
-                            param_grid=dict(random_forest__n_estimators=[3,50,100],
-                                            random_forest__max_features=[10,100,'auto']),
+                            param_grid=dict(random_forest__n_estimators=[10,100,500,1000],
+                                            random_forest__max_features=[10,20,30,'auto']),
                             n_jobs=-1)
+        },
+    # best results of gridsearch'd models above #################################### 
+    # - best kNN
+    'expt_30': { 
+        'note': 'best gridsearch result for kNN',
+        'name': 'Neighborhood Treatment Plant Fence',
+        'pl': Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1, 
+                                                        weights='distance', 
+                                                        n_neighbors=4)) ])
+        },
+    # - best scaled rbf SVM      
+    'expt_31': { 
+        'note': 'best gridsearch result for scaled rbf svm',
+        'name': 'Small Popcorn Treatment Plant Fence',
+        'pl': Pipeline([ ('scaling', StandardScaler()), 
+                        ('rbf_svm', SVC(kernel='rbf', 
+                                        cache_size=2000,
+                                        C=10.0,
+                                        gamma='auto',
+                                        class_weight='balanced')) ])    
+        },
+    # - best scaled RF
+    'expt_32': { 
+        'note': 'best gridsearch result for scaled RF',
+        'name': 'Small Wooded Treatment Plant Fence',
+        'pl': Pipeline([ ('scaling', StandardScaler()), 
+                        ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                    n_estimators=500,
+                                                                    max_features='auto')) ])
         }
 
 
 
-    }
+    } # end of experiment_dict
 
 
