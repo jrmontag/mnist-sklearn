@@ -11,7 +11,7 @@ import sys
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier 
 from sklearn.grid_search import GridSearchCV
 from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
@@ -232,7 +232,18 @@ experiment_dict = \
                         ('random_forest', RandomForestClassifier(n_jobs=-1,
                                                                     n_estimators=500,
                                                                     max_features='auto')) ])
-        }
+        },
+    # ensemble classifer that didn't get run earlier #################################### 
+    'expt_33': { 
+        'note': 'ExtraTrees',
+        'name': 'ExtraTrees',
+        'pl': Pipeline([ ('extra-trees', ExtraTreesClassifier(n_jobs=-1)) ]) 
+        },
+    'expt_34': { 
+        'note': 'scaled default ExtraTrees',
+        'name': 'scaled default ExtraTrees',
+        'pl': Pipeline([ ('scaling', StandardScaler()), ('extra-trees', ExtraTreesClassifier(n_jobs=-1)) ]) 
+        },
 
 
 
