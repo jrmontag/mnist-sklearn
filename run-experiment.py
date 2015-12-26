@@ -100,13 +100,14 @@ else:
     cv = 3
     # this gives a better idea of uncertainty, but it adds 'cv' more
     #   fits of the model 
-    logging.info('cross validating model accuracy with cv={}'.format(cv))
-    scores = cross_val_score(pipeline, X_test, y_test, cv=cv) 
-    logging.info('obtained accuracy={:0.2f}% +/- {:0.2f} with cv={}, \
-                    pipeline={} '.format(scores.mean()*100, 
-                                        scores.std()*100*2, 
-                                        cv, 
-                                        pipeline))
+#    #### add an args.cross_val_score to turn this off
+#    logging.info('cross validating model accuracy with cv={}'.format(cv))
+#    scores = cross_val_score(pipeline, X_test, y_test, cv=cv) 
+#    logging.info('obtained accuracy={:0.2f}% +/- {:0.2f} with cv={}, \
+#                    pipeline={} '.format(scores.mean()*100, 
+#                                        scores.std()*100*2, 
+#                                        cv, 
+#                                        pipeline))
 
     # cv for predictions 
     logging.info('cross validating model predictions with cv={}'.format(cv))
@@ -121,7 +122,11 @@ else:
 # > TODO: move this figure creation into utils <
 logging.info('calculating confusion matrix')
 sb.heatmap(confusion_matrix(y_test, predictions))
-plt.title(model_name + ' [expt] ({:.2f}%)'.format(scores.mean()*100))
+try:
+    plt.title(model_name + ' [expt] ({:.2f}%)'.format(scores.mean()*100))
+except NameError:
+    logging.debug('didnt find "scores" from cross_val_score, calculating accuracy by accuracy_score()')
+    plt.title(model_name + ' [expt] ({:.2f}%)'.format(accuracy_score(y_test,predictions)*100))
 plt.xlabel("True") 
 plt.ylabel("Pred")
 #plt.tight_layout()
