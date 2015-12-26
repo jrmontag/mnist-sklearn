@@ -21,6 +21,9 @@ def short_name(model):
     elif hasattr(model, 'best_estimator_'):
         # gridsearchcv
         name = 'gscv_' + '-'.join( [x[0] for x in model.estimator.steps ])
+    elif hasattr(model, 'base_estimator_'):
+        # bagging
+        name = 'bag_' + short_name(model.base_estimator)
     else:
         # for a single model, this will work
         name = model.__class__.__name__
