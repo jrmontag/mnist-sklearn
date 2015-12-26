@@ -80,16 +80,49 @@
         - RF: ~95%. {'random_forest__n_estimators': 500, 'random_forest__max_features': 'auto'}
     - once these are fit, submit one or more
         - train RF on everything (expt 32), submit results 
+- [x] intermission to clean up repo & file structure
+- [x] didn't try ExtraTrees classifier earlier -- try this now
+    - 94%, slightly higher with scaling (still 94.x%)
+- [x] read about [ensemble methods](http://scikit-learn.org/stable/modules/ensemble.html#ensemble-methods) 
+    - averaging
+        - Bagging == use this one each of 3 best
+    - boosting
+        - AdaBoost ==> use large adaboost classifier with each of 3 best classifiers 
+        - supposedly better with e.g. shallow trees, maybe our gridsearch'd models are opposed to this? 
+    - VotingClassifer
 
 
-- [] intermission to clean up repo & file structure
+- [] set up baggingclassifier with each of the three best as base
+    - if the 'pl' be BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py?? 
+        - seems like the baggingclassifier params could also be gridsearched
+    - running all in parallel seems too much for # of cores... increase stagger
+        - bagging kNN didn't finish. 
+            - run this one again (expt_35) 
+            - ~96.8%, improvement over single RF
+        - bagging SVM (36) ~ 96.3% - improvement over the single svm
+        - bagging RF (37) ~ 96.3% - improvement over single RF
+    - submit each of these trained on full dataset
+
+- [] set up adaboost with best RF 
+    - must have class weights and proper attrs in estimator (SVC doesn't, RF does, kNN doesn't)
+    - try 100 estimators (expt 38) 
+    - very fast. ~ 96.5% (slightly better than bagging)
+    - submit
 
 
-- [] ensemble methods with gridsearch'd models above 
-    - [VotingClassifer](http://scikit-learn.org/stable/modules/ensemble.html#voting-classifier) can also be gridsearched for component classifier settings 
+- [] gridsearch votingclassifier on top of the 3 gs'd classifiers to find best 'vote' type
+    - then fit, train, predict, submit that one
+
+
+
+- [] gridsearch VC for 'vote' w/ 3x bagged or adaboost 
+
+
+
 
 
 - [] set ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
+    - return to VC?
 
 
 
@@ -131,6 +164,7 @@
     - visualization? 
         - MDS / tSNE + kNN [via](http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#example-manifold-plot-lle-digits-py)
     - ``metrics.confusion_matrix``
+    - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
     - feature scaling? is there a reason to scale 0-256 down to 0-1? 
     - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
 
