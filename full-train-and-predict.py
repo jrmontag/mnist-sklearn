@@ -61,7 +61,12 @@ model_name = utils.short_name(pipeline) + \
                 '_full-data_' + \
                 datetime.utcnow().strftime('%Y-%m-%d_%H%M%S') 
 logging.info('writing fit pipeline to disk as {}'.format(model_name)) 
-joblib.dump(pipeline, os.path.join('saved_models', model_name) + '.pkl', compress=3)
+try:
+    joblib.dump(pipeline, os.path.join('saved_models', model_name) + '.pkl', compress=3)
+except OverflowError, e:
+    # this is annoying; look deeper, later
+    logging.warn('joblib write failed with error={}'.format(e)) 
+    logging.info('proceeding with predictions without writing model to disk')
 
 # predict 
 logging.info('predicting test data')
