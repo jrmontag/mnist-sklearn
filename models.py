@@ -11,7 +11,7 @@ import sys
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier 
+from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier, RandomForestClassifier, VotingClassifier 
 from sklearn.grid_search import GridSearchCV
 from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
@@ -26,6 +26,10 @@ from sklearn.pipeline import Pipeline
 
 experiment_dict = \
     { 
+    # Note: keys are of the form expt_*, which are used to execute the 
+    #   associated values of 'pl' keys (Pipelines and GridSearchCVs 
+    #   currently supported)
+    
     # experiments to build pipeline ################################################
     'expt_1': { 
         'note': 'random guessing (maintains class distributions)',
@@ -233,7 +237,7 @@ experiment_dict = \
                                                                     n_estimators=500,
                                                                     max_features='auto')) ])
         },
-    # ensemble classifer that didn't get run earlier #################################### 
+    # ensemble decision tree classifer that didn't get run earlier #################################### 
     'expt_33': { 
         'note': 'ExtraTrees',
         'name': 'ExtraTrees',
@@ -244,6 +248,81 @@ experiment_dict = \
         'name': 'scaled default ExtraTrees',
         'pl': Pipeline([ ('scaling', StandardScaler()), ('extra-trees', ExtraTreesClassifier(n_jobs=-1)) ]) 
         },
+    # bagging versions of three best classifiers ##################################
+    # - kNN
+    'expt_35': { 
+        'note': 'bagging on best gridsearched kNN estimator',
+        'name': 'Sack of Flanders',
+        'pl': BaggingClassifier( 
+                    Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4)) ]),
+                    n_jobs=-1,
+                    n_estimators=10)
+                     
+        },
+    # - best scaled rbf SVM      
+    'expt_36': { 
+        'note': 'bagging on best gridsearch scaled rbf svm',
+        'name': 'Sack of small popcorn',
+        'pl': BaggingClassifier( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                            ('rbf_svm', SVC(kernel='rbf', 
+                                            cache_size=2000,
+                                            C=10.0,
+                                            gamma='auto',
+                                            class_weight='balanced')) ]),    
+                    n_jobs=-1,
+                    n_estimators=10)
+        },
+    # - best scaled RF
+    'expt_37': { 
+        'note': 'bagging on best gridsearch result for scaled RF',
+        'name': 'Sack of small shrubs',
+        'pl': BaggingClassifier( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                            ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                    n_estimators=500,
+                                                                    max_features='auto')) ]),
+                    n_jobs=-1,
+                    n_estimators=10)
+        },
+    # adaboost with best RF (must supports class weights) #####################
+    # - best scaled RF
+    'expt_38': { 
+        'note': 'adaboost on best gridsearch result for scaled RF',
+        'name': 'On the shoulders of Ents',
+        'pl':  Pipeline([ ('scaling', StandardScaler()), 
+                            ('adaboost_random_forest', AdaBoostClassifier( 
+                                                            RandomForestClassifier(n_jobs=-1,
+                                                                                    n_estimators=500,
+                                                                                    max_features='auto'),
+                                                            n_estimators=100)) ])
+        },
+    # ensemble voting ################################################
+    # - gridsearch voting w/ best three  
+    'expt_39': { 
+        'note': 'gs over voting across best gs models',
+        'name': 'gs over voting across best gs models',
+        'pl': GridSearchCV( 
+                    VotingClassifier( estimators=[
+                        ('gs_knn', Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4)) ])),
+                        ('gs_svm', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('rbf_svm', SVC(kernel='rbf', 
+                                                                cache_size=2000,
+                                                                C=10.0,
+                                                                gamma='auto',
+                                                                class_weight='balanced')) ])),    
+                        ('gs_rf', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                        n_estimators=500,
+                                                                        max_features='auto')) ])) ]),
+                    param_grid=dict(voting=['hard','soft']),
+                    n_jobs=-1)
+        },
+    # - gridsearch voting and weights w/ bagged+boosted combos 
 
 
 
