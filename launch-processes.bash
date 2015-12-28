@@ -13,8 +13,8 @@ PY=python
 
 ####################  config  #############################
 # range of experiments to run 
-#SEQUENCE=`seq 35 38`
-SEQUENCE=37
+#SEQUENCE=`seq 42 43`
+SEQUENCE=44
 
 # are we doing a cv split ("experiment") or full test prediction?
 EXPERIMENT=false

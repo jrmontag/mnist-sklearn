@@ -92,7 +92,7 @@
     - VotingClassifer
 
 
-- [] set up baggingclassifier with each of the three best as base
+- [x] set up baggingclassifier with each of the three best as base
     - if the 'pl' be BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py?? 
         - seems like the baggingclassifier params could also be gridsearched
     - running all in parallel seems too much for # of cores... increase stagger
@@ -102,27 +102,32 @@
         - bagging SVM (36) ~ 96.3% - improvement over the single svm
         - bagging RF (37) ~ 96.3% - improvement over single RF
     - submit each of these trained on full dataset
-
-- [] set up adaboost with best RF 
+- [x] set up adaboost with best RF 
     - must have class weights and proper attrs in estimator (SVC doesn't, RF does, kNN doesn't)
     - try 100 estimators (expt 38) 
     - very fast. ~ 96.5% (slightly better than bagging)
     - submit
-
-
-- [] gridsearch votingclassifier on top of the 3 gs'd classifiers to find best 'vote' type
+- [x] gridsearch votingclassifier on top of the 3 gs'd classifiers to find best 'vote' type
     - then fit, train, predict, submit that one
-
+    - debug: JoblibAttributeError
+        - seems related to probability estimates in SVC; add probability=True to constructor (doesn't appear to effect other performance)
+    - 0.962 (+/-0.010) for {'voting': 'soft'}
+    - was expecting a better result by "averaging"
+        - trail full model with voting=soft & submit 
 
 
 - [] gridsearch VC for 'vote' w/ 3x bagged or adaboost 
+    - 3x bagged: 0.960 (+/-0.009) for {'voting': 'soft'}
+    - 2x bagged + adaboost RF: 0.961 (+/-0.010) for {'voting': 'soft'}
+        - was expecting a better result by "averaging"
+    - train full model on 3x bagging w/ voting=soft & submit (43) 
+    - train full model on 2x bagging + RF boosting w/ voting=soft & submit (44)
+        - running now
+    
+    
 
-
-
-
-
-- [] set ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
-    - return to VC?
+- [] use ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
+    - look at submission for Small Wooded Treatment Plant Fence (expt-32) and count up the predictions 
 
 
 
