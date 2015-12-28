@@ -114,49 +114,121 @@
     - 0.962 (+/-0.010) for {'voting': 'soft'}
     - was expecting a better result by "averaging"
         - trail full model with voting=soft & submit 
-
-
-- [] gridsearch VC for 'vote' w/ 3x bagged or adaboost 
+- [x] gridsearch VC for 'vote' w/ 3x bagged or adaboost 
     - 3x bagged: 0.960 (+/-0.009) for {'voting': 'soft'}
     - 2x bagged + adaboost RF: 0.961 (+/-0.010) for {'voting': 'soft'}
         - was expecting a better result by "averaging"
     - train full model on 3x bagging w/ voting=soft & submit (43) 
     - train full model on 2x bagging + RF boosting w/ voting=soft & submit (44)
-        - running now
-    
-    
-
-- [] use ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
+- [x] use ``class_weights`` in RF & SVM models to reverse-engineered values from scoreboard
     - look at submission for Small Wooded Treatment Plant Fence (expt-32) and count up the predictions 
 
+```bash
+$ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.submission | sort | uniq -c | sort -n | sed 's/^ *//' | sort -t" " -k2,2 > SWTPF.counts
+997 0
+1135 1
+1039 2
+1011 3
+980 4
+880 5
+961 6
+1022 7
+969 8
+1006 9
+```
+    - now look at per-count accuracy from scoreboard (SWTPF-leaderboard-scores.csv) 
+```bash
+0.99081633 0 
+0.99030837 1  
+0.9689922481 2    
+0.9653465347 3   
+0.9735234216 4   
+0.9674887892 5   
+0.9791231733 6   
+0.96692607 7 
+0.9599589322 8   
+0.9554013875 9
+```
+    - and now we can combine them to get the actual count of digits in the leaderboard test set (if we round) 
+
+```bash
+$ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 0 } { printf "%d %d\n", $1, $2/$3; sum+=$2/$3 } END { printf "\n%d \n", sum }'
+0 1006
+1 1146
+2 1072
+3 1047
+4 1006
+5 909
+6 981
+7 1056
+8 1009
+9 1052
+
+10288 
+
+$ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 10288 } { printf "%d %1.3f\n", $1, $2/$3/sum }'
+0 0.098
+1 0.111
+2 0.104
+3 0.102
+4 0.098
+5 0.088
+6 0.095
+7 0.103
+8 0.098
+9 0.102
+```
+    - in principal, we can now use the relative prevalence of these to weight the classes in eg the SVC model (want the weights to sum to one)
+    - both SVC and RF support passing the class weights, repurpose the best-performing versions of those
+        - RF: expt 32 (scalded RF) performed best on leaderboard (97.2%)
+            - reuse with weights (45) => ~96.6%, decent
+        - SVM: expt 36 (bagged, scaled, gs'd SVM) performed best on leaderboard (97.1%)
+            - reuse with weights (46) => ~95.6%, decent
+    - submit these as stand-alone models [running now]
+        - relaunched them because they weren't named (overwrite log files)
+        - sent
 
 
-- [] strongest features + **adjust probabilities of assignment based on leaderboard observations** 
+    - >>> if these score higher than their predecessors, add them to the best VotingClassifier <<< 
 
-- [] build funcs to read and display example images
 
-- [] if too slow, can we fit a linear model and look at the relative importance of features 
 
-- [] start building models 
-    - interactive single model
-    - end-to-end, executable single model (read, process, model, predict, write)
-    - loop through default settings of [all of these](http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html)
-    - choose a couple to gridsearch (or similar)
-    - consider preprocessing approaches 
-        - scikit's preprocessing module (zero mean, unit variance)
-        - minmax scalar 
-    - try ensemble methods
-    - some approaches in [this writeup](http://colah.github.io/posts/2014-10-Visualizing-MNIST/)
-    - try NN, convnets?
 
-## results
 
-[Submission date] Classifier/Pipeline: training accuracy (leaderboard accuracy)
+- [] sklearn's built-in NN (MLPClassifier)
+    - big gridsearch
+    - dang. MLPC only in dev version of scikit 
+        - see if we can create a local virtualenv for that
+        - looks ok, running as expt_47
 
-    - [ 2015-12-18 ] DummyClassifier (random guessing) ['Crash Test Dummies']: 10% (10%)
-    - [ 2015-12-19 ] Linear SVM (default settings) ['Grapevine']: 86% (79%) **interesting that the leaderboard score is that much lower** 
-    - [ 2015-12-20 ] Scaling + Linear SVM DummyClassifier [Tall To Ride]: 91% (N/A)
-    
+```bash
+jmontague@data-science-3:~
+$ virtualenv -p python ~/CCC-venv
+
+jmontague@data-science-3:~/2015-12-21_CCC [master+*]
+$ source ~/CCC-venv/bin/activate
+
+jmontague@data-science-3:~
+$ pip install -r requirements.txt
+$ pip uninstall scikit-learn
+
+(CCC-venv)jmontague@data-science-3:~/2015-12-21_CCC [master+*]
+$ pip install -e git+git@github.com:scikit-learn/scikit-learn.git
+
+(CCC-venv)jmontague@data-science-3:~/2015-12-21_CCC [master+*]
+$ pip install cython
+
+(CCC-venv)jmontague@data-science-3:~/CCC-venv/lib/python2.7/site-packages/scikit-learn [master]
+$ python setup.py build_ext --inplace
+$ python
+>>> import sklearn; sklearn.__version__
+'0.18.dev0'
+```
+
+
+
+
+
 
 
 
@@ -172,6 +244,9 @@
     - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
     - feature scaling? is there a reason to scale 0-256 down to 0-1? 
     - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
+
+
+- [] build funcs to read and display example images
 
 ------------
 
