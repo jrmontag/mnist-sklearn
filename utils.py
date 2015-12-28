@@ -15,18 +15,28 @@ import sys
 
 def short_name(model):
     """Return a simplified name for this model. A bit brittle."""
-    if hasattr(model, 'steps'):
-        # pipeline
-        name = '-'.join( [ pair[0] for pair in model.steps ] )
-    elif hasattr(model, 'best_estimator_'):
-        # gridsearchcv
-        name = 'gscv_' + '-'.join( [x[0] for x in model.estimator.steps ])
-    elif hasattr(model, 'base_estimator_'):
-        # bagging
-        name = 'bag_' + short_name(model.base_estimator)
-    else:
+    # *TODO* make this method more general 
+    # for a single model, this will work
+    name = model.__class__.__name__
+    try:
+        if hasattr(model, 'steps'):
+            # pipeline
+            name = '-'.join( [ pair[0] for pair in model.steps ] )
+        elif hasattr(model, 'best_estimator_'):
+            if hasattr(model.estimator, 'steps'):
+                # gridsearchcv
+                name = 'gscv_' + '-'.join( [x[0] for x in model.estimator.steps ])
+            elif hasattr(model.estimator, 'estimators'):
+                # votingclassifier
+                name = 'gscv_vc_' + '-'.join( [x[0] for x in model.estimator.estimators ])
+        elif hasattr(model, 'base_estimator_'):
+            # bagging
+            name = 'bag_' + short_name(model.base_estimator)
+    except AttributeError, e:
+        logging.info('utils.short_name() couldnt generate quality name')
         # for a single model, this will work
         name = model.__class__.__name__
+        logging.info('falling back to generic name={}'.format(name))
     return name 
 
 
