@@ -300,7 +300,7 @@ experiment_dict = \
                                                             n_estimators=100)) ])
         },
     # ensemble voting ################################################
-    # - gridsearch voting w/ best three  
+    # - gridsearch voting w/ best three stand-alone models 
     'expt_39': { 
         'note': 'gs over voting across best gs models',
         'name': 'gs over voting across best gs models',
@@ -311,6 +311,7 @@ experiment_dict = \
                                                             n_neighbors=4)) ])),
                         ('gs_svm', Pipeline([ ('scaling', StandardScaler()), 
                                                 ('rbf_svm', SVC(kernel='rbf', 
+                                                                probability=True,
                                                                 cache_size=2000,
                                                                 C=10.0,
                                                                 gamma='auto',
@@ -322,7 +323,156 @@ experiment_dict = \
                     param_grid=dict(voting=['hard','soft']),
                     n_jobs=-1)
         },
-    # - gridsearch voting and weights w/ bagged+boosted combos 
+    # - gridsearch voting w/ bagged combos 
+    'expt_40': { 
+        'note': 'gs over voting across bagged best gs models',
+        'name': 'gs over voting across bagged best gs models',
+        'pl': GridSearchCV( 
+                    VotingClassifier( estimators=[
+                        ('bag_knn', BaggingClassifier( 
+                                        KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4), 
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_svm', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('rbf_svm', SVC(kernel='rbf', 
+                                                                    probability=True,
+                                                                    cache_size=2000,
+                                                                    C=10.0,
+                                                                    gamma='auto',
+                                                                    class_weight='balanced')) ]),    
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_rf', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                                n_estimators=500,
+                                                                                max_features='auto')) ]),
+                                        n_jobs=-1,
+                                        n_estimators=10))]),
+                        param_grid=dict(voting=['hard','soft']),
+                        n_jobs=-1)
+        },
+    # - gridsearch voting w/ bagged + boosted rf
+    'expt_41': { 
+        'note': 'gs over voting across bagged + boosted best gs models',
+        'name': 'gs over voting across bagged + boosted best gs models',
+        'pl': GridSearchCV( 
+                    VotingClassifier( estimators=[
+                        ('bag_knn', BaggingClassifier( 
+                                        KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4), 
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_svm', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('rbf_svm', SVC(kernel='rbf', 
+                                                                    probability=True,
+                                                                    cache_size=2000,
+                                                                    C=10.0,
+                                                                    gamma='auto',
+                                                                    class_weight='balanced')) ]),    
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+
+                        ('boost_rf', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('adaboost_random_forest', AdaBoostClassifier( 
+                                                                            RandomForestClassifier(n_jobs=-1,
+                                                                                                n_estimators=500,
+                                                                                                max_features='auto'),
+                                                                            n_estimators=100)) ])) ]),
+
+
+                        param_grid=dict(voting=['hard','soft']),
+                        n_jobs=-1)
+        },
+    # - fix vote=soft for 39-40 (41?) & train on full data  ############################# 
+    #   - (expt 39 w/o gs + soft vote)
+    'expt_42': { 
+        'note': 'soft voting with best gs models',
+        'name': 'Basic three-party system',
+        'pl': VotingClassifier( estimators=[
+                        ('gs_knn', Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4)) ])),
+                        ('gs_svm', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('rbf_svm', SVC(kernel='rbf', 
+                                                                probability=True,
+                                                                cache_size=2000,
+                                                                C=10.0,
+                                                                gamma='auto',
+                                                                class_weight='balanced')) ])),    
+                        ('gs_rf', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                                        n_estimators=500,
+                                                                                        max_features='auto')) ])) ],
+                    voting='soft')
+
+        },
+    #   - (expt 40 w/o gs + soft vote)
+    'expt_43': { 
+        'note': 'soft voting with bagged gs models',
+        'name': 'PACs and the three-party system',
+        'pl': VotingClassifier( estimators=[
+                        ('bag_knn', BaggingClassifier( 
+                                        KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4), 
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_svm', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('rbf_svm', SVC(kernel='rbf', 
+                                                                    probability=True,
+                                                                    cache_size=2000,
+                                                                    C=10.0,
+                                                                    gamma='auto',
+                                                                    class_weight='balanced')) ]),    
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_rf', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                                n_estimators=500,
+                                                                                max_features='auto')) ]),
+                                        n_jobs=-1,
+                                        n_estimators=10))],
+                    voting='soft')
+        },
+    #   - (expt 41 w/o gs + soft vote)
+    'expt_44': { 
+        'note': 'voting classifier: 2x bags + boosted RF w/ soft voting',
+        'name': 'SuperPACs ruin everything',
+        'pl': VotingClassifier( estimators=[
+                        ('bag_knn', BaggingClassifier( 
+                                        KNeighborsClassifier(n_jobs=-1, 
+                                                            weights='distance', 
+                                                            n_neighbors=4), 
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('bag_svm', BaggingClassifier( 
+                                        Pipeline([ ('scaling', StandardScaler()), 
+                                                    ('rbf_svm', SVC(kernel='rbf', 
+                                                                    probability=True,
+                                                                    cache_size=2000,
+                                                                    C=10.0,
+                                                                    gamma='auto',
+                                                                    class_weight='balanced')) ]),    
+                                        n_jobs=-1,
+                                        n_estimators=10)),
+                        ('boost_rf', Pipeline([ ('scaling', StandardScaler()), 
+                                                ('adaboost_random_forest', AdaBoostClassifier( 
+                                                                                RandomForestClassifier(n_jobs=-1,
+                                                                                                n_estimators=500,
+                                                                                                max_features='auto'),
+                                                                                n_estimators=100)) ])) ],
+                    voting='soft')
+        },
+    # - what next?  
+
 
 
 
