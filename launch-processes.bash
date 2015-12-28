@@ -5,24 +5,31 @@
 #
 
 # vars
-VENV=tmp-venv
-PY=${VENV}/bin/python
-# manual work-around for ubuntu
+#VENV=tmp-venv
+#PY=${VENV}/bin/python
+
+# manual work-around for ubuntu system install
 PY=python
+# special case for MLP - dev release of sklearn in virtual env
+source /home/jmontague/CCC-venv/bin/activate
+
 
 
 ####################  config  #############################
 # range of experiments to run 
-#SEQUENCE=`seq 42 43`
-SEQUENCE=44
+#SEQUENCE=`seq 45 46`
+SEQUENCE=47
 
 # are we doing a cv split ("experiment") or full test prediction?
-EXPERIMENT=false
+EXPERIMENT=true
 
 # server or laptop?
 SERVER=true
 
 # stagger the workload 
+# 300 = 5 min
+# 600 = 10 min
+# 1200 = 20 min
 SLEEPTIME=300
 ###########################################################
 
@@ -52,6 +59,8 @@ echo "$(date +%Y-%m-%d\ %H:%M:%S) -- started running $0"
 
 filedate="$(date +%Y-%m-%dT%H:%M:%S)"
 
+echo "$(date +%Y-%m-%d\ %H:%M:%S) -- using python interpreter: $(which python)"
+
 for i in ${SEQUENCE}; do
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- launching experiment ${i}"
     nohup ${NICE} ${PY} ${SCRIPT} expt_${i} ${ARGS} > log/${filedate}_expt_${i}.log & 
@@ -59,6 +68,10 @@ for i in ${SEQUENCE}; do
     sleep ${SLEEPTIME} 
 done
 
+
+echo "$(date +%Y-%m-%d\ %H:%M:%S) -- deactivating virtualenv"
+deactivate
+
+echo "$(date +%Y-%m-%d\ %H:%M:%S) -- interpreter now set to: $(which python)"
+
 echo "$(date +%Y-%m-%d\ %H:%M:%S) -- finished launching experiments"
-
-
