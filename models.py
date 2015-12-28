@@ -7,6 +7,7 @@ __license__="MIT License"
 #   individual experiment runs 
 
 import logging
+import numpy as np
 import sys
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
@@ -16,6 +17,10 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
+try:
+    from sklearn.neural_network import MLPClassifier
+except ImportError, e:
+    logging.warn('couldnt import sklearn.neural_network. Are you using the dev release virtualenv?') 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -471,10 +476,66 @@ experiment_dict = \
                                                                                 n_estimators=100)) ])) ],
                     voting='soft')
         },
-    # - what next?  
+    # Include inferred class distributions in best stand-alone models of SVM, RF ################## 
+    'expt_45': { 
+        'note': 'add class weights to expt_32',
+        'name': 'Yeah I work out',
+        'pl': Pipeline([ ('scaling', StandardScaler()), 
+                        ('random_forest', RandomForestClassifier(n_jobs=-1,
+                                                                    n_estimators=500,
+                                                                    max_features='auto',
+                                                                    class_weight = {0:0.098, 
+                                                                                    1:0.111, 
+                                                                                    2:0.104, 
+                                                                                    3:0.102, 
+                                                                                    4:0.098, 
+                                                                                    5:0.088, 
+                                                                                    6:0.095, 
+                                                                                    7:0.103, 
+                                                                                    8:0.098, 
+                                                                                    9:0.102})) ])
+        },
+    'expt_46': { 
+        'note': 'add class weights to expt_36',
+        'name': 'Oh you work out?',
+        'pl': BaggingClassifier( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                            ('rbf_svm', SVC(kernel='rbf', 
+                                            cache_size=2000,
+                                            C=10.0,
+                                            gamma='auto',
+                                            class_weight = {0:0.098, 
+                                                            1:0.111, 
+                                                            2:0.104, 
+                                                            3:0.102, 
+                                                            4:0.098, 
+                                                            5:0.088, 
+                                                            6:0.095, 
+                                                            7:0.103, 
+                                                            8:0.098, 
+                                                            9:0.102})) ]),    
+                    n_jobs=-1,
+                    n_estimators=10)
+        },
+    # neural network experiments ################################################
+    'expt_47': { 
+        'note': 'gridsearch multilayer perceptron, using tips from dev docs',
+        'name': 'tbd',
+        'pl': GridSearchCV( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                                ('mlp', MLPClassifier()) ]), 
+                    param_grid=dict( mlp__alpha=10.0**-np.arange(1, 7),
+                                    mlp__hidden_layer_sizes=[(50, ), (100, ), (200, )],
+                                    mlp__activation=['logistic', 'tanhh', 'relu'],
+                                    mlp__algorithm=['l-bfgs', 'sgd', 'adam']),
+                    n_jobs=-1)
+        },
 
 
-
+    # - scikit-neuralnetwork
+    # - tensorflow 
+    # - tpot
+    # - sklearn-deap
 
     } # end of experiment_dict
 
