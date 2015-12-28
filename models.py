@@ -526,7 +526,7 @@ experiment_dict = \
                                 ('mlp', MLPClassifier()) ]), 
                     param_grid=dict( mlp__alpha=10.0**-np.arange(1, 7),
                                     mlp__hidden_layer_sizes=[(50, ), (100, ), (200, )],
-                                    mlp__activation=['logistic', 'tanhh', 'relu'],
+                                    mlp__activation=['logistic', 'tanh', 'relu'],
                                     mlp__algorithm=['l-bfgs', 'sgd', 'adam']),
                     n_jobs=-1)
         },
