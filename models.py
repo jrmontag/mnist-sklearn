@@ -185,6 +185,7 @@ experiment_dict = \
                             n_jobs=-1)
         },
     # narrower gridsearch on three models above #################################### 
+    # - kNN
     'expt_27': { 
         'note': 'focused gridsearch cv on kNN',
         'name': 'focused gridsearch cv on kNN',
@@ -398,8 +399,12 @@ experiment_dict = \
     # - fix vote=soft for 39-40 (41?) & train on full data  ############################# 
     #   - (expt 39 w/o gs + soft vote)
     'expt_42': { 
-        'note': 'soft voting with best gs models',
-        'name': 'Basic three-party system',
+        # this were from v1 
+        #'name': 'Basic three-party system',
+        #'note': 'soft voting with best gs models',
+        # these are from v2 (expanded data) 
+        'name': 'E pluribus unum',
+        'note': 'soft voting with best gs models on expanded dataset',
         'pl': VotingClassifier( estimators=[
                         ('gs_knn', Pipeline([ ('knn', KNeighborsClassifier(n_jobs=-1, 
                                                             weights='distance', 
