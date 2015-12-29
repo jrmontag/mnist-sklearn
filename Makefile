@@ -1,7 +1,7 @@
 # Josh Montague, 2015-12
 
 # locations
-BASEDIR=$(CURDIR)
+BASEDIR=$(PWD)
 DATADIR=$(BASEDIR)/data
 #BINDIR=$(BASEDIR)/bin
 
@@ -40,7 +40,6 @@ everything: convert
 
 
 convert: venv 
-	#[ ! -e $(DATADIR)/\*-images.npy ] || $(VPY) $(CONVERT)
 	test -e $(DATADIR)/\*-images.npy || $(VPY) $(CONVERT)
 
 
@@ -51,6 +50,12 @@ $(VENV)/bin/activate: requirements.txt
 	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
 	$(VBIN)/pip install -Ur requirements.txt
 	touch $(VBIN)/activate
+#	# this part needs to be figured out still
+#	cd $(VENV)/lib/python2.7/site-packages/scikit-learn; \
+#    source $(VBIN)/activate; \
+#    python setup.py build_ext --inplace; \
+#    cd ..; ln -s scikit-learn/sklearn sklearn; \
+#    cd $(BASEDIR) 
 
 
 clean:
