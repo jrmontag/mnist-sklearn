@@ -10,7 +10,7 @@
 
 # manual work-around for ubuntu system install
 PY=python
-# special case for MLP - dev release of sklearn in virtual env
+# necessary once we include MLP - dev release of sklearn in virtual env
 source /home/jmontague/CCC-venv/bin/activate
 # I think we don't need this anymore b/c of symlink
 #export PYTHONPATH=~/CCC-venv/lib/python2.7/site-packages/scikit-learn:$PYTHONPATH
@@ -20,10 +20,10 @@ source /home/jmontague/CCC-venv/bin/activate
 ####################  config  #############################
 # range of experiments to run 
 #SEQUENCE=`seq 45 46`
-SEQUENCE=48
+SEQUENCE=52
 
 # are we doing a cv split ("experiment") or full test prediction?
-EXPERIMENT=true
+EXPERIMENT=false
 
 # server or laptop?
 SERVER=true
