@@ -93,7 +93,7 @@
 
 
 - [x] set up baggingclassifier with each of the three best as base
-    - if the 'pl' be BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py?? 
+    - if the 'pl' is BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py?? 
         - seems like the baggingclassifier params could also be gridsearched
     - running all in parallel seems too much for # of cores... increase stagger
         - bagging kNN didn't finish. 
@@ -190,11 +190,7 @@ $ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 
         - relaunched them because they weren't named (overwrite log files)
         - sent
     - neither were much higher than the original; don't bother updating VotingClassifier 
-
-
-
-
-- [] sklearn's built-in NN (MLPClassifier)
+- [x] sklearn's built-in NN (MLPClassifier)
     - big gridsearch
     - dang. MLPC only in dev version of scikit 
         - see if we can create a local virtualenv for that
@@ -223,7 +219,7 @@ $ python
 >>> import sklearn; sklearn.__version__
 '0.18.dev0'
 
-# but didn't build/install totally correctly
+# but didn't build/install totally correctly, maybe ran setup.py in wrong place?
 #   - in virtualenv, get sklearn ImportError
 #   - resolve by either (in the launch-process.bash script):
 $ export PYTHONPATH=~/CCC-venv/lib/python2.7/site-packages/scikit-learn:$PYTHONPATH
@@ -231,12 +227,41 @@ $ export PYTHONPATH=~/CCC-venv/lib/python2.7/site-packages/scikit-learn:$PYTHONP
 jmontague@data-science-3:~/CCC-venv/lib/python2.7/site-packages 
 $ ln -s scikit-learn/sklearn sklearn
 ```
-    - ran gridsearch on 47 - worked, high of ~94.8%; try again with updated grid based on scores 
+
+    - ran gridsearch on 47 - worked, high of ~94.8%
+- [x] try again with updated grid based on scores 
         - best alpha was on edge of grid - run again to extend on larger end
         - also didn't think to add extra layers - add that, too: [(50,), (100,), (200,), (50,50), (100,100), (200,200), (50,50,50), (100,100,100), (200,200,200)] 
         - drop 'sgd' algorithm 
         - stick to 'relu' activation 
-    - launch this job to run overnight (expt_48)
+    - best score (from 48) ~ 95.6%
+        - extra layer, alpha at edge of grid again
+        - look through this more & make next round of GS:
+        ``cat log/2015-12-29T03:43:29_expt_48.log | grep for | sort -n -t" " -k6,6``
+
+
+- [] run with larger range of layer sizes and other params 
+    - best model ~95.8%: {'mlp__hidden_layer_sizes': (1000, 1000), 'mlp__algorithm': 'l-bfgs', 'mlp__alpha': 10.0}
+    - convert best to train for submission  (52 - note: out of order bc of earlier long run times 
+
+
+- [x] test other SVM kernels (in particular, poly w/ gs on degree) 
+    - running as expt_50 
+    - best ~95.1%, {'svm__degree': 2, 'svm__C': 15.0}
+    - not noticibly better than rbf kernel (which I think should do better with high-dimensional data) 
+- [x] combine dimensionality reduction with kNN
+    - t-SNE to 2-5 dimensions, then kNN (expt 51) 
+    - doesn't work because TSNE doesn't have a transform method
+
+
+
+
+- [] expand training data with perturbations
+    - then train this data on all of the simplest algorithms 
+    - add this to Makefile
+
+
+
 
 
 
@@ -260,13 +285,13 @@ $ ln -s scikit-learn/sklearn sklearn
 - [] other things to try:
     - visualization? 
         - MDS / tSNE + kNN [via](http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#example-manifold-plot-lle-digits-py)
-    - ``metrics.confusion_matrix``
     - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
     - feature scaling? is there a reason to scale 0-256 down to 0-1? 
     - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
 
 
 - [] build funcs to read and display example images
+- inspect numpy arrays better in repl: ``np.set_printoptions(linewidth=200)``
 
 ------------
 
