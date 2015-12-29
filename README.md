@@ -278,34 +278,16 @@ $ ln -s scikit-learn/sklearn sklearn
 
 
 
+------------
 
 # TODO
 
 - add mpl backend change to makefile 
-
 - add venv + dev sklearn to Makefile 
 
-- [] other things to try:
-    - visualization? 
-        - MDS / tSNE + kNN [via](http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html#example-manifold-plot-lle-digits-py)
-    - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
-    - feature scaling? is there a reason to scale 0-256 down to 0-1? 
-    - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
-    - implement any of the suggested "best performers" from [official lecun data](http://yann.lecun.com/exdb/mnist/)
-
-- [] build funcs to read and display example images
-- inspect numpy arrays better in repl: ``np.set_printoptions(linewidth=200)``
-
-
-------------
-
-
-
-
-
-
-
-
-
+- build funcs to read and display example images
+- look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
+- feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
+- implement any of the suggested "best performers" from [official lecun data](http://yann.lecun.com/exdb/mnist/)
 
 
