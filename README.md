@@ -182,15 +182,14 @@ $ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 
     - both SVC and RF support passing the class weights, repurpose the best-performing versions of those
         - RF: expt 32 (scalded RF) performed best on leaderboard (97.2%)
             - reuse with weights (45) => ~96.6%, decent
+            - leaderboard score =>  97.1%
         - SVM: expt 36 (bagged, scaled, gs'd SVM) performed best on leaderboard (97.1%)
             - reuse with weights (46) => ~95.6%, decent
+            - leaderboard score => 96.4%
     - submit these as stand-alone models [running now]
         - relaunched them because they weren't named (overwrite log files)
         - sent
-
-
-    - >>> if these score higher than their predecessors, add them to the best VotingClassifier <<< 
-
+    - neither were much higher than the original; don't bother updating VotingClassifier 
 
 
 
@@ -223,10 +222,31 @@ $ python setup.py build_ext --inplace
 $ python
 >>> import sklearn; sklearn.__version__
 '0.18.dev0'
+
+# but didn't build/install totally correctly
+#   - in virtualenv, get sklearn ImportError
+#   - resolve by either (in the launch-process.bash script):
+$ export PYTHONPATH=~/CCC-venv/lib/python2.7/site-packages/scikit-learn:$PYTHONPATH
+# or: 
+jmontague@data-science-3:~/CCC-venv/lib/python2.7/site-packages 
+$ ln -s scikit-learn/sklearn sklearn
 ```
+    - ran gridsearch on 47 - worked, high of ~94.8%; try again with updated grid based on scores 
+        - best alpha was on edge of grid - run again to extend on larger end
+        - also didn't think to add extra layers - add that, too: [(50,), (100,), (200,), (50,50), (100,100), (200,200), (50,50,50), (100,100,100), (200,200,200)] 
+        - drop 'sgd' algorithm 
+        - stick to 'relu' activation 
+    - launch this job to run overnight (expt_48)
 
 
 
+
+
+
+
+- add features to X_train?
+    - number of pixels above a threshold value
+    - otehr feature engineering?
 
 
 
