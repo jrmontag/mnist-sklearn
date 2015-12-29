@@ -518,6 +518,7 @@ experiment_dict = \
                     n_estimators=10)
         },
     # neural network experiments ################################################
+    # - sklearn's MLPClassifier
     'expt_47': { 
         'note': 'gridsearch multilayer perceptron, using tips from dev docs',
         'name': 'tbd',
@@ -528,6 +529,18 @@ experiment_dict = \
                                     mlp__hidden_layer_sizes=[(50, ), (100, ), (200, )],
                                     mlp__activation=['logistic', 'tanh', 'relu'],
                                     mlp__algorithm=['l-bfgs', 'sgd', 'adam']),
+                    n_jobs=-1)
+        },
+    # - v2 of sklearn's MLPClassifier
+    'expt_48': { 
+        'note': 'v2 of gridsearch multilayer perceptron, modifying param_grid',
+        'name': 'tbd',
+        'pl': GridSearchCV( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                                ('mlp', MLPClassifier(activation='relu')) ]), 
+                    param_grid=dict( mlp__alpha=10.0**-np.arange(-1,6),
+                                    mlp__hidden_layer_sizes=[(50,), (100,), (200,), (50,50), (100,100), (200,200), (50,50,50), (100,100,100), (200,200,200)],
+                                    mlp__algorithm=['l-bfgs', 'adam']),
                     n_jobs=-1)
         },
 
