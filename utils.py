@@ -60,14 +60,25 @@ def create_submission(predictions, sub_name, comment=None, team='DrJ'):
     return True
 
 
-def load_np_arrays():
-    """Return numpy arrays for training dataset, training labels, 
-    and test dataset (in that order). 
+def load_np_arrays(files='original'):
+    """
+    Return numpy arrays for training dataset, training labels, 
+    and test dataset (in that order). If files='original', 
+    return the image data, as given. If files='expanded', 
+    return the perturbed image files (~5 times larger). 
+    
+    files='original', 'expanded' 
     """
     # nb: path assumes that we call this function from project root  
-    #   - may not be appropriate for importing into code in bin/ ?
-    X_train = np.load(os.path.join('data', 'train-images.npy'))
-    y_train = np.load(os.path.join('data', 'train-labels.npy'))
+    train_imgs_f = 'train-images.npy'
+    train_labels_f = 'train-labels.npy'
+
+    if files == 'expanded':
+        train_imgs_f = 'expanded-' + train_imgs_f 
+        train_labels_f = 'expanded-' + train_labels_f 
+
+    X_train = np.load(os.path.join('data', train_imgs_f))
+    y_train = np.load(os.path.join('data', train_labels_f))
     X_test = np.load(os.path.join('data', 'test-images.npy'))
 
     return (X_train, y_train, X_test)
