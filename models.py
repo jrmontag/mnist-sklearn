@@ -15,6 +15,7 @@ from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier, RandomForestClassifier, VotingClassifier 
 from sklearn.grid_search import GridSearchCV
 from sklearn.linear_model import SGDClassifier, LogisticRegression
+from sklearn.manifold import TSNE
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 try:
@@ -543,6 +544,64 @@ experiment_dict = \
                                     mlp__algorithm=['l-bfgs', 'adam']),
                     n_jobs=-1)
         },
+    # - gridsearch wide MLP hidden layers
+    'expt_49': { 
+        'note': 'v3 of gridsearch multilayer perceptron, modifying param_grid',
+        'name': 'tbd',
+        'pl': GridSearchCV( 
+                    Pipeline([ ('scaling', StandardScaler()), 
+                                ('mlp', MLPClassifier(activation='relu', verbose=True)) ]), 
+                    param_grid=dict( mlp__alpha=10.0**-np.arange(-2,5),
+                                    mlp__hidden_layer_sizes=[(200,), (500,), (1000,), (200,200), (500,500), (1000,1000), (500,500,500)],
+                                    mlp__algorithm=['l-bfgs', 'adam']),
+                    n_jobs=-1)
+        },
+    # revisit SVM with poly kernel gridsearch ##################################################
+    'expt_50': { 
+        'note': 'gridsearch poly kernel degree with scaled svm',
+        'name': 'gridsearch poly kernel degree with scaled svm',
+        'pl': GridSearchCV( Pipeline([ ('scaling', StandardScaler()), 
+                                        ('svm', SVC(cache_size=2000,
+                                                    kernel='poly', 
+                                                    gamma='auto')) ]),
+                            param_grid=dict(svm__C=[0.1, 0.5, 1.0, 5.0, 10.0, 15.0],
+                                            svm__degree=np.arange(2,12)),
+                            n_jobs=-1) 
+        },
+#    # dimensionality reduction + kNN ######################################################
+#    # note: this doesn't work because TSNE doesn't implement a transform method. Pipeline throws 
+#    #          an error on import about this, so leave commented out.
+#    'expt_51': { 
+#        'note': 'gridsearch over tSNE dim reduction + kNN',
+#        'name': 'gridsearch over tSNE dim reduction + kNN',
+#        'pl': GridSearchCV( Pipeline([ 
+#                                ('tsne', TSNE(verbose=1)), 
+#                                ('knn', KNeighborsClassifier(n_jobs=-1)) ]), 
+#                            param_grid=dict(tsne__n_components=[2,3,4],
+#                                            tsne__perplexity=[20,30,40,50],
+#                                            tsne__learning_rate=[400,700,1000],
+#                                            knn__n_neighbors=range(2,10), 
+#                                            knn__weights=['distance','uniform']), 
+#                            n_jobs=-1 ) 
+#        },
+    # - use best MLP from gridsearch (note: out of order due to run time!) 
+    # {'mlp__hidden_layer_sizes': (1000, 1000), 'mlp__algorithm': 'l-bfgs', 'mlp__alpha': 10.0} 
+    'expt_52': { 
+        'note': 'best MLP from gridsearch',
+        'name': 'Pinky and the Brain',
+        'pl': Pipeline([ ('scaling', StandardScaler()), 
+                        ('mlp', MLPClassifier(activation='relu', 
+                                                hidden_layer_sizes=(1000,1000), 
+                                                algorithm='l-bfgs', 
+                                                alpha=10.0, 
+                                                verbose=True)) ]) 
+        },
+
+
+
+    # voting classifier based on 2+ MLP NN?
+
+    # expand dataset with perturbations, then use svm, rf, mlp 
 
 
     # - scikit-neuralnetwork
