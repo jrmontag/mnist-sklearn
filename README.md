@@ -284,6 +284,8 @@ $ ln -s scikit-learn/sklearn sklearn
 
 - add mpl backend change to makefile 
 - add venv + dev sklearn to Makefile 
+- add an args.cross_val_score to turn off CV scoring + stdev 
+- move matrix plotting into utils module
 
 - build funcs to read and display example images
 - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
