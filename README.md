@@ -241,6 +241,7 @@ $ ln -s scikit-learn/sklearn sklearn
 
 
 - [] run with larger range of layer sizes and other params 
+    - took ~4 hrs for GSCV 
     - best model ~95.8%: {'mlp__hidden_layer_sizes': (1000, 1000), 'mlp__algorithm': 'l-bfgs', 'mlp__alpha': 10.0}
     - convert best to train for submission  (52 - note: out of order bc of earlier long run times 
 
@@ -253,25 +254,26 @@ $ ln -s scikit-learn/sklearn sklearn
     - t-SNE to 2-5 dimensions, then kNN (expt 51) 
     - doesn't work because TSNE doesn't have a transform method
 
-
-
-
-- [] expand training data with perturbations
+- [x] expand training data with perturbations
     - then train this data on all of the simplest algorithms 
-    - add this to Makefile
+    - new train data ~ 1 GB
 
 
+- [] test this with default models (expt 27, 28, 29), compare scores 
+    - need to flag run-experiment.py to read the proper dataset
+    - these are slower to train, need to increase stagger time (killed 28 and 29 to let 27 run - restart them once 27 finishes)
+        - 27 running for >1 hr
+    - also much more ram (~30 GB for expt_27)
+    - all 3 were ~95% in first round (w/ the smaller dataset) 
+        - kNN (96.1%): {'knn__weights': 'distance', 'knn__n_neighbors': 4} (which is the same as expt_30 
+            - ^ from the gscv, killed before fully finished 
+        - SVM ():  
+        - RF ():  
+    - in the interest of trying to get predictions, I think I'll just run a full fit and predict on the gridsearch'd voting classifier (basic three party system, 42)  
+        - running now ("expanded 42")
+        - if time, maybe try the individuals: 30, 31, 32  
 
 
-
-
-
-
-
-
-- add features to X_train?
-    - number of pixels above a threshold value
-    - otehr feature engineering?
 
 
 
@@ -281,6 +283,7 @@ $ ln -s scikit-learn/sklearn sklearn
 
 - add mpl backend change to makefile 
 
+- add venv + dev sklearn to Makefile 
 
 - [] other things to try:
     - visualization? 
@@ -288,10 +291,11 @@ $ ln -s scikit-learn/sklearn sklearn
     - look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
     - feature scaling? is there a reason to scale 0-256 down to 0-1? 
     - feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
-
+    - implement any of the suggested "best performers" from [official lecun data](http://yann.lecun.com/exdb/mnist/)
 
 - [] build funcs to read and display example images
 - inspect numpy arrays better in repl: ``np.set_printoptions(linewidth=200)``
+
 
 ------------
 
