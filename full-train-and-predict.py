@@ -20,6 +20,8 @@ import utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument('expt', help='specify experiment to run (see README)')
+parser.add_argument('--expanded', action='store_true',
+                    help='read expanded (perturbation) data files')
 parser.add_argument('--ubuntu', action='store_true',
                     help='modify imports if running on ubuntu')
 parser.add_argument('-v', '--verbose', action='store_true',
@@ -33,10 +35,14 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s',
                     stream=sys.stdout, level=loglevel)
 logging.debug('logging enabled - preparing for experiment') 
 
+# read the right files
+files='original'
+if args.expanded:
+    files='expanded' 
 
-logging.info('reading input data from disk') 
+logging.info('reading {} input data from disk'.format(files)) 
 try:
-    X_train_full, y_train_full, X_test = utils.load_np_arrays() 
+    X_train_full, y_train_full, X_test = utils.load_np_arrays(files) 
     logging.debug('observed data dimensions: {}, {}. {}'.format(
                     X_train_full.shape, y_train_full.shape, X_test.shape))
 except IOError, e:
