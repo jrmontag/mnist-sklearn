@@ -399,10 +399,10 @@ experiment_dict = \
     # - fix vote=soft for 39-40 (41?) & train on full data  ############################# 
     #   - (expt 39 w/o gs + soft vote)
     'expt_42': { 
-        # this were from v1 
+        # "3-party system" trained this model on the original data 
         #'name': 'Basic three-party system',
         #'note': 'soft voting with best gs models',
-        # these are from v2 (expanded data) 
+        # "E Pluribus Unum" trained this model on the expanded data 
         'name': 'E pluribus unum',
         'note': 'soft voting with best gs models on expanded dataset',
         'pl': VotingClassifier( estimators=[
@@ -603,16 +603,6 @@ experiment_dict = \
         },
 
 
-
-    # voting classifier based on 2+ MLP NN?
-
-    # expand dataset with perturbations, then use svm, rf, mlp 
-
-
-    # - scikit-neuralnetwork
-    # - tensorflow 
-    # - tpot
-    # - sklearn-deap
 
     } # end of experiment_dict
 
