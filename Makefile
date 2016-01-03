@@ -5,9 +5,6 @@ BASEDIR=$(PWD)
 DATADIR=$(BASEDIR)/data
 #BINDIR=$(BASEDIR)/bin
 
-# files
-CONVERT=convert-binary-data.py
-
 ##### Python details
 # choose your favorite system interpreter
 BASE_PY=python2.7
@@ -16,6 +13,11 @@ VENV=tmp-venv
 # virtualenv-specific locations
 VBIN=$(BASEDIR)/$(VENV)/bin
 VPY=$(VBIN)/python
+
+# code 
+CONVERT=convert-binary-data.py
+EXPAND=expand-np-arrays.py
+
 
 
 
@@ -28,15 +30,21 @@ help:
 	@echo 'Makefile for reproducible analysis                                 '
 	@echo '                                                                   '
 	@echo 'Usage:                                                             '
-	@echo '   make everything       build entire project, end-to-end        '
-	@echo '   make convert          convert the original binary data into numpy arrays  '
-	@echo '   make venv             create local virtualenv for this project '
+#	@echo '   make everything       build entire project, end-to-end        '
+	@echo '   make venv             create local virtualenv for this project (recommended)'
+	@echo '   make convert          convert the original binary data into numpy arrays'
+	@echo '   make expanded         expand original data (by ~5x) by translating images' 
+	@echo '                             (necessary for best leaderboard score)'
 	@echo '                                                                   '
 	@echo '   make clean            remove all the generated data files       '
 	@echo '                                                                   '
 
 
-everything: convert 
+#everything: convert 
+
+
+expanded: convert 
+	test -e $(DATADIR)/expanded-train-images.npy || $(VPY) $(EXPAND) 
 
 
 convert: venv 
