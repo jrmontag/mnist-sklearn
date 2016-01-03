@@ -8,6 +8,8 @@ This code was used for a intra-team "Kaggle"-like modeling competition on the ca
 
 All of the data processing and modeling is written in Python, and there are a couple of additional bash scripts to facilitate various pieces of the workflow. Most of this code should work out of the box with Python 2.7 on OS X and Ubuntu (an isolated environment is recommended - the requirements.txt I used is included). 
 
+``[placeholder for basic instructions]``
+
 Additional words about the context and my workflow are in [the article on my site](joshmontague.com). 
 
 -----
