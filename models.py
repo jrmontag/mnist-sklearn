@@ -21,7 +21,8 @@ from sklearn.neighbors import KNeighborsClassifier
 try:
     from sklearn.neural_network import MLPClassifier
 except ImportError, e:
-    logging.warn('couldnt import sklearn.neural_network. Are you using the dev release virtualenv?') 
+    logging.warn('couldnt import sklearn.neural_network!') 
+    logging.warn('as of the time of writing, this requires a build of the dev release') 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -33,16 +34,14 @@ from sklearn.pipeline import Pipeline
 experiment_dict = \
     { 
     # Note: keys are of the form expt_*, which are used to execute the 
-    #   associated values of 'pl' keys (Pipelines and GridSearchCVs 
-    #   currently supported)
-    
+    #   associated values of 'pl' keys     
+    #
     # experiments to build pipeline ################################################
     'expt_1': { 
         'note': 'random guessing (maintains class distributions)',
         'name': 'Crash Test Dummies', 
         'pl': Pipeline([ ('dummy_clf', DummyClassifier()) ])
         },
-
     'expt_2': { 
         'note': 'vanilla linear svm (heard it through the grapevine)',
         'name': 'Grapevine',
@@ -523,44 +522,65 @@ experiment_dict = \
                     n_jobs=-1,
                     n_estimators=10)
         },
+    # 
+    # As of the time of writing, using the MLPClassifier requires building the   
+    #   developer branch of sklearn. If you want to use these experiments, 
+    #   the sklearn docs include a ref for building this version:
+    #   http://scikit-learn.org/stable/developers/contributing.html#git-repo
+    #   Then, you can uncomment the next few experiments below (+ 52) to run them. 
+    #
     # neural network experiments ################################################
     # - sklearn's MLPClassifier
-    'expt_47': { 
-        'note': 'gridsearch multilayer perceptron, using tips from dev docs',
-        'name': 'tbd',
-        'pl': GridSearchCV( 
-                    Pipeline([ ('scaling', StandardScaler()), 
-                                ('mlp', MLPClassifier()) ]), 
-                    param_grid=dict( mlp__alpha=10.0**-np.arange(1, 7),
-                                    mlp__hidden_layer_sizes=[(50, ), (100, ), (200, )],
-                                    mlp__activation=['logistic', 'tanh', 'relu'],
-                                    mlp__algorithm=['l-bfgs', 'sgd', 'adam']),
-                    n_jobs=-1)
-        },
-    # - v2 of sklearn's MLPClassifier
-    'expt_48': { 
-        'note': 'v2 of gridsearch multilayer perceptron, modifying param_grid',
-        'name': 'tbd',
-        'pl': GridSearchCV( 
-                    Pipeline([ ('scaling', StandardScaler()), 
-                                ('mlp', MLPClassifier(activation='relu')) ]), 
-                    param_grid=dict( mlp__alpha=10.0**-np.arange(-1,6),
-                                    mlp__hidden_layer_sizes=[(50,), (100,), (200,), (50,50), (100,100), (200,200), (50,50,50), (100,100,100), (200,200,200)],
-                                    mlp__algorithm=['l-bfgs', 'adam']),
-                    n_jobs=-1)
-        },
-    # - gridsearch wide MLP hidden layers
-    'expt_49': { 
-        'note': 'v3 of gridsearch multilayer perceptron, modifying param_grid',
-        'name': 'tbd',
-        'pl': GridSearchCV( 
-                    Pipeline([ ('scaling', StandardScaler()), 
-                                ('mlp', MLPClassifier(activation='relu', verbose=True)) ]), 
-                    param_grid=dict( mlp__alpha=10.0**-np.arange(-2,5),
-                                    mlp__hidden_layer_sizes=[(200,), (500,), (1000,), (200,200), (500,500), (1000,1000), (500,500,500)],
-                                    mlp__algorithm=['l-bfgs', 'adam']),
-                    n_jobs=-1)
-        },
+#    'expt_47': { 
+#        'note': 'gridsearch multilayer perceptron, using tips from dev docs',
+#        'name': 'tbd',
+#        'pl': GridSearchCV( 
+#                    Pipeline([ ('scaling', StandardScaler()), 
+#                                ('mlp', MLPClassifier()) ]), 
+#                    param_grid=dict( mlp__alpha=10.0**-np.arange(1, 7),
+#                                    mlp__hidden_layer_sizes=[(50, ), (100, ), (200, )],
+#                                    mlp__activation=['logistic', 'tanh', 'relu'],
+#                                    mlp__algorithm=['l-bfgs', 'sgd', 'adam']),
+#                    n_jobs=-1)
+#        },
+#    # - v2 of sklearn's MLPClassifier
+#    'expt_48': { 
+#        'note': 'v2 of gridsearch multilayer perceptron, modifying param_grid',
+#        'name': 'tbd',
+#        'pl': GridSearchCV( 
+#                    Pipeline([ ('scaling', StandardScaler()), 
+#                                ('mlp', MLPClassifier(activation='relu')) ]), 
+#                    param_grid=dict( mlp__alpha=10.0**-np.arange(-1,6),
+#                                    mlp__hidden_layer_sizes=[(50,), 
+#                                                            (100,), 
+#                                                            (200,), 
+#                                                            (50,50), 
+#                                                            (100,100), 
+#                                                            (200,200), 
+#                                                            (50,50,50), 
+#                                                            (100,100,100), 
+#                                                            (200,200,200)],
+#                                    mlp__algorithm=['l-bfgs', 'adam']),
+#                    n_jobs=-1)
+#        },
+#    # - gridsearch wide MLP hidden layers
+#    'expt_49': { 
+#        'note': 'v3 of gridsearch multilayer perceptron, modifying param_grid',
+#        'name': 'tbd',
+#        'pl': GridSearchCV( 
+#                    Pipeline([ ('scaling', StandardScaler()), 
+#                                ('mlp', MLPClassifier(activation='relu', verbose=True)) ]), 
+#                    param_grid=dict( mlp__alpha=10.0**-np.arange(-2,5),
+#                                    mlp__hidden_layer_sizes=[(200,), 
+#                                                            (500,), 
+#                                                            (1000,), 
+#                                                            (200,200), 
+#                                                            (500,500), 
+#                                                            (1000,1000), 
+#                                                            (500,500,500)],
+#                                    mlp__algorithm=['l-bfgs', 'adam']),
+#                    n_jobs=-1)
+#        },
     # revisit SVM with poly kernel gridsearch ##################################################
     'expt_50': { 
         'note': 'gridsearch poly kernel degree with scaled svm',
@@ -575,7 +595,7 @@ experiment_dict = \
         },
 #    # dimensionality reduction + kNN ######################################################
 #    # note: this doesn't work because TSNE doesn't implement a transform method. Pipeline throws 
-#    #          an error on import about this, so leave commented out.
+#    #          an error on import about this, so leave this commented out.
 #    'expt_51': { 
 #        'note': 'gridsearch over tSNE dim reduction + kNN',
 #        'name': 'gridsearch over tSNE dim reduction + kNN',
@@ -589,21 +609,18 @@ experiment_dict = \
 #                                            knn__weights=['distance','uniform']), 
 #                            n_jobs=-1 ) 
 #        },
-    # - use best MLP from gridsearch (note: out of order due to run time!) 
+    # best MLP from gridsearch (note: out of order due to run time!) ######################### 
     # {'mlp__hidden_layer_sizes': (1000, 1000), 'mlp__algorithm': 'l-bfgs', 'mlp__alpha': 10.0} 
-    'expt_52': { 
-        'note': 'best MLP from gridsearch',
-        'name': 'Pinky and the Brain',
-        'pl': Pipeline([ ('scaling', StandardScaler()), 
-                        ('mlp', MLPClassifier(activation='relu', 
-                                                hidden_layer_sizes=(1000,1000), 
-                                                algorithm='l-bfgs', 
-                                                alpha=10.0, 
-                                                verbose=True)) ]) 
-        },
-
-
+#    'expt_52': { 
+#        'note': 'best MLP from gridsearch',
+#        'name': 'Pinky and the Brain',
+#        'pl': Pipeline([ ('scaling', StandardScaler()), 
+#                        ('mlp', MLPClassifier(activation='relu', 
+#                                                hidden_layer_sizes=(1000,1000), 
+#                                                algorithm='l-bfgs', 
+#                                                alpha=10.0, 
+#                                                verbose=True)) ]) 
+#        },
 
     } # end of experiment_dict
-
 
