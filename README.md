@@ -1,5 +1,8 @@
 # CCC, 2015 edition
 
+**Note: This is a clean-up in-progress** 
+
+-----------
 
 2015-12-16, kick-off meeting to review project definition
 
@@ -257,9 +260,7 @@ $ ln -s scikit-learn/sklearn sklearn
 - [x] expand training data with perturbations
     - then train this data on all of the simplest algorithms 
     - new train data ~ 1 GB
-
-
-- [] test this with default models (expt 27, 28, 29), compare scores 
+- [x] test this with default models (expt 27, 28, 29), compare scores 
     - need to flag run-experiment.py to read the proper dataset
     - these are slower to train, need to increase stagger time (killed 28 and 29 to let 27 run - restart them once 27 finishes)
         - 27 running for >1 hr
@@ -270,26 +271,41 @@ $ ln -s scikit-learn/sklearn sklearn
         - SVM ():  
         - RF ():  
     - in the interest of trying to get predictions, I think I'll just run a full fit and predict on the gridsearch'd voting classifier (basic three party system, 42)  
-        - running now ("expanded 42")
-        - if time, maybe try the individuals: 30, 31, 32  
+        - running now ("expanded 42"). note: original fit to data took 1.5 hrs, and this data is 5x bigger.
+            - took 16 hours!
+        - submitted (98.6% on hold-out set) 
+        
 
 
+# Ideas
 
-
+- scikit-neuralnetwork
+- tensorflow 
+- tpot
+- sklearn-deap
 
 
 ------------
 
 # TODO
 
-- add mpl backend change to makefile 
+- consolidate train and submit files into one python script
+- move current README to notes and add proper readme with description of approach  
+    - discuss early steps (ascii art => numpy arrays => notebook for functions => bash script)
+- comment MLP models so code with work with stable sklearn release, add readme note
+- add mpl backend change to makefile (or at least a comment) 
 - add venv + dev sklearn to Makefile 
-- add an args.cross_val_score to turn off CV scoring + stdev 
-- move matrix plotting into utils module
+- modify Makefile targets to point to actual created npy files 
+- move matrix plotting into utils module (?)
+- make utils.short_name less fragile 
+
+
+# Future work? 
 
 - build funcs to read and display example images
-- look at tree [feature importance](http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py)
-- feature importance [via](http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
-- implement any of the suggested "best performers" from [official lecun data](http://yann.lecun.com/exdb/mnist/)
+- look at feature importance 
+    - http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py
+    - http://bugra.github.io/work/notes/2014-11-22/an-introduction-to-supervised-learning-scikit-learn/)
+    - ex: in voting classifier, does per-digit accuracy vary by model?
 
 

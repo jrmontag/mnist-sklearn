@@ -15,7 +15,6 @@ import sys
 
 def short_name(model):
     """Return a simplified name for this model. A bit brittle."""
-    # *TODO* make this method more general 
     # for a single model, this will work
     name = model.__class__.__name__
     try:
