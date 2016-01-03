@@ -1,4 +1,4 @@
-# MNIST + ``scikit-learn`` = :heart: 
+# MNIST + ``scikit-learn`` = :star2: 
 
 
 *Note: this is a WIP*
