@@ -11,7 +11,7 @@ The rules were pretty simple:
 - use whatever platform you want (laptop, EC2, stone tablet)  
 - be prepared to present what you did to the team (in particular, this meant if you cheated and just downloaded the test labels, you were in for A Bad Time) 
 
-All of the data processing and modeling code here is written in Python, and there are a couple of additional bash scripts to facilitate various pieces of the workflow. Most of this code should work out of the box with Python 2.7 on OS X and Ubuntu (an isolated environment is recommended - the requirements.txt I used is included). 
+All of the data processing and modeling code here is written in Python, and there are a couple of additional bash scripts to facilitate various pieces of the workflow. I think most of this code should work out of the box with Python 2.7 on OS X and Ubuntu (an isolated environment is recommended - the requirements.txt I used is included). However, installing the development version of ``sklearn`` less automatic. See more notes below. 
 
 ``[placeholder for basic instructions]``
 
@@ -28,7 +28,7 @@ More words about the context and workflow are in [my longer post](www.joshmontag
 
 ### Installing the development branch of ``sklearn`` 
 
-I totally hacked this together and I'm sure there's a more appropriate way to do this. Nevertheless, here's what I did that worked:
+I totally hacked this together (on Ubuntu, didn't test on OS X) and I'm sure there's a more appropriate way to do this. Nevertheless, here's what I did that worked:
 
 **[WIP] do this again to verify** 
 
