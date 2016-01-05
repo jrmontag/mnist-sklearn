@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+
 # 
-# original by Scott Hendrickson, modified by Josh Montague 
+# modified from images.py (included), by Scott Hendrickson 
 #
 
 import fileinput
