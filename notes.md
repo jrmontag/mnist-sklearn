@@ -289,12 +289,9 @@ $ ln -s scikit-learn/sklearn sklearn
 
 # TODO
 
-- update requirements.txt with versions
-- include 2x requirements.txt (one with git sklearn)
-- comment MLP models so code with work with stable sklearn release, add readme note
-- add mpl backend change to makefile (or at least a comment) 
 - modify Makefile targets to point to actual created npy files 
-- clean up / remove notebooks 
+- align leaderboard count files (extensions), put in data/ and update notes.md 
+- test fresh run-through (git clone => first round of models)  
 
 - move matrix plotting into utils module (?)
 - make utils.short_name less fragile 
