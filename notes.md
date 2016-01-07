@@ -272,8 +272,8 @@ $ ln -s scikit-learn/sklearn sklearn
         - RF ():  
     - in the interest of trying to get predictions, I think I'll just run a full fit and predict on the gridsearch'd voting classifier (basic three party system, 42)  
         - running now ("expanded 42"). note: original fit to data took 1.5 hrs, and this data is 5x bigger.
-            - took 16 hours!
-        - submitted (98.6% on hold-out set) 
+        - took 16 hours!
+    - submitted (98.6% on hold-out set) 
         
 
 
@@ -292,6 +292,7 @@ $ ln -s scikit-learn/sklearn sklearn
 - modify Makefile targets to point to actual created npy files 
 - align leaderboard count files (extensions), put in data/ and update notes.md 
 - test fresh run-through (git clone => first round of models)  
+- check for typos in readme
 
 - move matrix plotting into utils module (?)
 - make utils.short_name less fragile 

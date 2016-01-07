@@ -3,19 +3,25 @@
 
 This code was developed for a intra-team Kaggle-like modeling competition on the canonical [MNIST handwritten digits dataset](https://en.wikipedia.org/wiki/MNIST_database).  
 
-We were given the training images and labels, the test images, and a simple Python script that read (and displayed) the binary image data. We had to submit a file with predictions for the test images, one prediction per line.  
+We were given the training images and labels, the test images, and a simple Python script that read (and "displayed") the binary image data. We had two weeks to submit any number of prediction files for the test images, one prediction per line.  
 
-The rules were pretty simple: 
+The other rules were pretty simple: 
 
 - write code in whatever language you want
-- use whatever platform you want (laptop, EC2, stone tablet)  
+- use whatever platform you want (laptop, EC2, tea leaves, stone tablet)  
 - be prepared to present what you did to the team (in particular, this meant if you cheated and just downloaded the test labels, you were in for A Bad Time) 
 
-All of the data processing and modeling code here is written in Python, and there are a couple of additional bash scripts to facilitate various pieces of the workflow. I think most of this code should work out of the box with Python 2.7 on OS X and Ubuntu (an isolated environment is recommended - the requirements.txt I used is included). However, installing the development version of ``sklearn`` less automatic. See more notes below. 
+Given the size of the data and how much I :heart: ``scikit-learn``, I chose to use Python on a single server (combination of MacBook and EC2). All of the data processing and modeling code here is written in Python, and there are a couple of additional bash scripts to facilitate various pieces of the workflow. 
 
-``[placeholder for basic instructions]``
+I think most of this code should work out of the box with Python 2.7 on OS X and Ubuntu (an isolated environment is recommended - the requirements.txt I used is included). However, installing the development version of ``sklearn`` is not out-of-the-box. See more notes below. 
 
-More words about the context and workflow are in [my longer post](www.joshmontague.com). 
+```bash
+[placeholder for basic instructions]
+```
+
+Ideally, you'll just ``git clone; cd; make`` and get quite a ways.
+
+For more words about the context and workflow, you can read [my longer post](http://joshmontague.com). 
 
 -----
 
@@ -33,6 +39,6 @@ I totally hacked this together (on Ubuntu, didn't test on OS X) and I'm sure the
 **[WIP] do this again to verify** 
 
 - navigate to the appropriate ``site-packages`` directory for your Python environment and clone the ``sklearn`` repo [as described in the docs](http://scikit-learn.org/stable/developers/contributing.html#git-repo).  
-- 
-  
+ 
+ 
 
