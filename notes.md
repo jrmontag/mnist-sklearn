@@ -289,7 +289,11 @@ $ ln -s scikit-learn/sklearn sklearn
 
 # TODO
 
-- modify Makefile targets to point to actual created npy files 
+- modify Makefile targets 
+    - [x] build venv
+        - this seems messy... scipy and sklearn seem to have failed and are being built from source because of an issue with the numpy install? 
+    - [x] .npy files 
+    - [] .submission files 
 - align leaderboard count files (extensions), put in data/ and update notes.md 
 - test fresh run-through (git clone => first round of models)  
 - check for typos in readme

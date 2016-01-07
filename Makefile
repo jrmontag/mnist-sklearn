@@ -6,7 +6,9 @@ BASEDIR=$(PWD)
 DATADIR=$(BASEDIR)/data
 
 # Python 
-BASE_PY=python2.7
+# - specifying 2.7 explicitly leads to an unsolved ImportError 
+#BASE_PY=python2.7
+BASE_PY=
 # rename virtualenv if desired
 VENV=tmp-venv
 # virtualenv-specific locations
@@ -47,25 +49,17 @@ help:
 #submissions/*-foo.submission: $(DATADIR)/test-images.npy
 #   run bash process script (leave commit w/ a few experiments in seq) 
 
+
 $(DATADIR)/test-images.npy: $(VENV)/bin/activate
-#	test -e $(DATADIR)/test-images.npy || $(VPY) $(CONVERT)
 	source $(VBIN)/activate; \
 	python $(CONVERT)
 
 
 $(VENV)/bin/activate: requirements.txt
-	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
+	#test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
+	test -d $(VENV) || virtualenv $(VENV) 
 	$(VBIN)/pip install -r $< 
 	touch $(VBIN)/activate
-
-
-
-
-expanded: convert 
-	test -e $(DATADIR)/expanded-train-images.npy || $(VPY) $(EXPAND) 
-
-
-
 
 
 
@@ -80,8 +74,12 @@ clean:
    
 
 
-
-
+## old
+#
+#expanded: convert 
+#	test -e $(DATADIR)/expanded-train-images.npy || $(VPY) $(EXPAND) 
+#
+#
 
 
 .PHONY: venv clean convert everything 
