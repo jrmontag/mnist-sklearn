@@ -1,17 +1,17 @@
 # Josh Montague, 2015-12
+#   MIT License
 
 # locations
 BASEDIR=$(PWD)
 DATADIR=$(BASEDIR)/data
-#BINDIR=$(BASEDIR)/bin
 
-##### Python details
-# choose your favorite system interpreter
+# Python 
 BASE_PY=python2.7
 # rename virtualenv if desired
 VENV=tmp-venv
 # virtualenv-specific locations
 VBIN=$(BASEDIR)/$(VENV)/bin
+# --- maybe we don't need this?
 VPY=$(VBIN)/python
 
 # code 
@@ -40,30 +40,39 @@ help:
 	@echo '                                                                   '
 
 
-#everything: convert 
+# update this later, use one of the first handful of submissions as the 
+#   dependency
+#all: submissions/*-foo.submission
+
+#submissions/*-foo.submission: $(DATADIR)/test-images.npy
+#   run bash process script (leave commit w/ a few experiments in seq) 
+
+$(DATADIR)/test-images.npy: $(VENV)/bin/activate
+#	test -e $(DATADIR)/test-images.npy || $(VPY) $(CONVERT)
+	source $(VBIN)/activate; \
+	python $(CONVERT)
+
+
+$(VENV)/bin/activate: requirements.txt
+	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
+	$(VBIN)/pip install -r $< 
+	touch $(VBIN)/activate
+
+
 
 
 expanded: convert 
 	test -e $(DATADIR)/expanded-train-images.npy || $(VPY) $(EXPAND) 
 
 
-convert: venv 
-	test -e $(DATADIR)/\*-images.npy || $(VPY) $(CONVERT)
 
 
-venv: $(VENV)/bin/activate
 
 
-$(VENV)/bin/activate: requirements.txt
-	test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
-	$(VBIN)/pip install -Ur requirements.txt
-	touch $(VBIN)/activate
-#	# this part needs to be figured out still
-#	cd $(VENV)/lib/python2.7/site-packages/scikit-learn; \
-#    source $(VBIN)/activate; \
-#    python setup.py build_ext --inplace; \
-#    cd ..; ln -s scikit-learn/sklearn sklearn; \
-#    cd $(BASEDIR) 
+
+
+
+# target for building dev sklearn?
 
 
 clean:
