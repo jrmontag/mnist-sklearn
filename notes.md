@@ -297,6 +297,8 @@ $ ln -s scikit-learn/sklearn sklearn
 - align leaderboard count files (extensions), put in data/ and update notes.md 
 - test fresh run-through (git clone => first round of models)  
 - check for typos in readme
+- add notes to readme about getting raw data (from yan's website?) 
+- add ^ to makefile?
 
 - move matrix plotting into utils module (?)
 - make utils.short_name less fragile 
