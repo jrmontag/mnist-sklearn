@@ -23,7 +23,6 @@ CONVERT=convert-binary-data.py
 EXPAND=expand-np-arrays.py
 
 
-
 # datetime
 DATE := $(shell date +'%Y-%m-%dT%H:%M:%S')
 #DATE := $(shell date +'%Y-%m-%d')
@@ -34,7 +33,7 @@ help:
 	@echo '                                                                   '
 
 
-
+# run everything in the setup
 all: $(SAVEDIR)/knn_cv-split_*.pdf 
 
 
@@ -42,22 +41,22 @@ all: $(SAVEDIR)/knn_cv-split_*.pdf
 $(SAVEDIR)/knn_cv-split_*.pdf: $(DATADIR)/train-images.npy
 	nohup bash launch-processes.bash > $(LOGDIR)/$(DATE)_sample-log.nohup.out & 
 	@echo 
-	@echo "Sample experiments are now running in the background."  
-	@echo "... use `tail -f (sample-log) to view overall progress."  
-	@echo "... or use `tail -f (individual logfile) to view individual model progress."  
+	@echo 'Sample experiments are now running in the background.'  
+	@echo '... use `tail -f (sample-log) to view overall progress.'  
+	@echo '... or use `tail -f (individual logfile) to view individual model progress.'  
 
 
 # binary data ==> npy arrays
-$(DATADIR)/train-images.npy: $(VENV)/bin/activate
+$(DATADIR)/train-images.npy: $(VBIN)/activate
 	source $(VBIN)/activate; \
 	python $(CONVERT)
 
 
 # local environment
-$(VENV)/bin/activate: requirements.txt
-	#test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
-	test -d $(VENV) || virtualenv $(VENV) 
-	source $(VENV); \
+$(VBIN)/activate: requirements.txt
+	#test -d $(VENV) || virtualenv $(VENV) 
+	virtualenv -p $(BASE_PY) $(VENV) 
+	source $(VBIN)/activate ; \
 	pip install -r $< 
 	touch $(VBIN)/activate
 
@@ -65,8 +64,9 @@ $(VENV)/bin/activate: requirements.txt
 # additional training data
 expanded: $(DATADIR)/train-images.npy 
 	test -e $(DATADIR)/expanded-train-images.npy || \
-	source $(VENV); \
-	python $(EXPAND)	
+	source $(VBIN)/activate ; \
+	python $(EXPAND)
+	touch $<
 
 
 # !!! delete all created npy arrays !!! 
@@ -74,5 +74,4 @@ clean:
 	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
    
 
-
-.PHONY: clean expanded 
+.PHONY: clean expanded all 
