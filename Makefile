@@ -4,17 +4,19 @@
 # locations
 BASEDIR=$(PWD)
 DATADIR=$(BASEDIR)/data
+SAVEDIR=$(BASEDIR)/saved_models
+SUBDIR=$(BASEDIR)/submissions
+LOGDIR=$(BASEDIR)/log
+
 
 # Python 
-# - specifying 2.7 explicitly leads to an unsolved ImportError 
-#BASE_PY=python2.7
-BASE_PY=
+BASE_PY=python2
 # rename virtualenv if desired
 VENV=tmp-venv
 # virtualenv-specific locations
 VBIN=$(BASEDIR)/$(VENV)/bin
 # --- maybe we don't need this?
-VPY=$(VBIN)/python
+#VPY=$(VBIN)/python
 
 # code 
 CONVERT=convert-binary-data.py
@@ -22,64 +24,55 @@ EXPAND=expand-np-arrays.py
 
 
 
-
 # datetime
-#DATE := $(shell date +'%Y-%m-%d %H:%M:%S')
-DATE := $(shell date +'%Y-%m-%d')
+DATE := $(shell date +'%Y-%m-%dT%H:%M:%S')
+#DATE := $(shell date +'%Y-%m-%d')
 TIME := $(shell date +'%H:%M:%S')
 
 help:
 	@echo 'Makefile for reproducible analysis                                 '
 	@echo '                                                                   '
-	@echo 'Usage:                                                             '
-#	@echo '   make everything       build entire project, end-to-end        '
-	@echo '   make venv             create local virtualenv for this project (recommended)'
-	@echo '   make convert          convert the original binary data into numpy arrays'
-	@echo '   make expanded         expand original data (by ~5x) by translating images' 
-	@echo '                             (necessary for best leaderboard score)'
-	@echo '                                                                   '
-	@echo '   make clean            remove all the generated data files       '
-	@echo '                                                                   '
 
 
-# update this later, use one of the first handful of submissions as the 
-#   dependency
-#all: submissions/*-foo.submission
 
-#submissions/*-foo.submission: $(DATADIR)/test-images.npy
-#   run bash process script (leave commit w/ a few experiments in seq) 
+all: $(SAVEDIR)/knn_cv-split_*.pdf 
 
 
-$(DATADIR)/test-images.npy: $(VENV)/bin/activate
+# example experiment
+$(SAVEDIR)/knn_cv-split_*.pdf: $(DATADIR)/train-images.npy
+	nohup bash launch-processes.bash > $(LOGDIR)/$(DATE)_sample-log.nohup.out & 
+	@echo 
+	@echo "Sample experiments are now running in the background."  
+	@echo "... use `tail -f (sample-log) to view overall progress."  
+	@echo "... or use `tail -f (individual logfile) to view individual model progress."  
+
+
+# binary data ==> npy arrays
+$(DATADIR)/train-images.npy: $(VENV)/bin/activate
 	source $(VBIN)/activate; \
 	python $(CONVERT)
 
 
+# local environment
 $(VENV)/bin/activate: requirements.txt
 	#test -d $(VENV) || virtualenv -p $(BASE_PY) $(VENV) 
 	test -d $(VENV) || virtualenv $(VENV) 
-	$(VBIN)/pip install -r $< 
+	source $(VENV); \
+	pip install -r $< 
 	touch $(VBIN)/activate
 
 
+# additional training data
+expanded: $(DATADIR)/train-images.npy 
+	test -e $(DATADIR)/expanded-train-images.npy || \
+	source $(VENV); \
+	python $(EXPAND)	
 
 
-
-
-# target for building dev sklearn?
-
-
+# !!! delete all created npy arrays !!! 
 clean:
 	[ ! -d $(DATADIR) ] || rm $(DATADIR)/*.npy
    
 
 
-## old
-#
-#expanded: convert 
-#	test -e $(DATADIR)/expanded-train-images.npy || $(VPY) $(EXPAND) 
-#
-#
-
-
-.PHONY: venv clean convert everything 
+.PHONY: clean expanded 
