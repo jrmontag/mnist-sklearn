@@ -127,7 +127,7 @@
     - look at submission for Small Wooded Treatment Plant Fence (expt-32) and count up the predictions 
 
 ```bash
-$ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.submission | sort | uniq -c | sort -n | sed 's/^ *//' | sort -t" " -k2,2 > SWTPF.counts
+$ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.submission | sort | uniq -c | sort -n | sed 's/^ *//' | sort -t" " -k2,2 > data/SWTPF_counts.csv
 997 0
 1135 1
 1039 2
@@ -139,7 +139,7 @@ $ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.s
 969 8
 1006 9
 ```
-    - now look at per-count accuracy from scoreboard (SWTPF-leaderboard-scores.csv) 
+    - now look at per-count accuracy from scoreboard (data/SWTPF-leaderboard-scores.csv) 
 ```bash
 0.99081633 0 
 0.99030837 1  
@@ -155,7 +155,7 @@ $ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.s
     - and now we can combine them to get the actual count of digits in the leaderboard test set (if we round) 
 
 ```bash
-$ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 0 } { printf "%d %d\n", $1, $2/$3; sum+=$2/$3 } END { printf "\n%d \n", sum }'
+$ join SWTPF_counts.csv SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 0 } { printf "%d %d\n", $1, $2/$3; sum+=$2/$3 } END { printf "\n%d \n", sum }'
 0 1006
 1 1146
 2 1072
@@ -169,7 +169,7 @@ $ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 
 
 10288 
 
-$ join SWTPF.counts SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 10288 } { printf "%d %1.3f\n", $1, $2/$3/sum }'
+$ join SWTPF_counts.csv SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 10288 } { printf "%d %1.3f\n", $1, $2/$3/sum }'
 0 0.098
 1 0.111
 2 0.104
@@ -294,7 +294,6 @@ $ ln -s scikit-learn/sklearn sklearn
         - this seems messy... scipy and sklearn seem to have failed and are being built from source because of an issue with the numpy install? 
     - [x] .npy files 
     - [] .submission files 
-- align leaderboard count files (extensions), put in data/ and update notes.md 
 - test fresh run-through (git clone => first round of models)  
 - check for typos in readme
 - add notes to readme about getting raw data (from yan's website?) 
