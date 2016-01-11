@@ -1,7 +1,7 @@
-numpy==1.10
-scipy==0.16
-jupyter==1.0
--e git+git@github.com:scikit-learn/scikit-learn.git
-matplotlib==1.5
+numpy==1.10.2
+scipy==0.16.1
+jupyter==1.0.0
+-e git@github.com:scikit-learn/scikit-learn.git@7cfa55452609c717c96b4c267466c80cc4038845
+matplotlib==1.5.0
 seaborn==0.6
 cython==0.23
