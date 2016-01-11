@@ -6,7 +6,7 @@
 
 ####################  config  #############################
 # range of experiments to run 
-SEQUENCE=`seq 1 4`
+SEQUENCE=`seq 1 2`
 #SEQUENCE=42
 
 # are we doing a cv split ("experiment")? (vs. train and predict on test) 
@@ -26,15 +26,17 @@ SLEEPTIME=60
 # 1200 = 20 min
 ###########################################################
 
-# variables
+## variables
+# log dir
+LOGDIR=log
+# virtualenv
+#VENV=/home/jmontague/CCC-venv
 VENV=tmp-venv
-
+#VENV=dev-tmp-venv
 # Python script
 PY_SCRIPT=build-model.py
 
-# necessary once we include MLP - dev release of sklearn in virtual env
-#source /home/jmontague/CCC-venv/bin/activate
-# - replace ^ with v for testing makefile
+# activate the appropriate virtualenv
 source ${VENV}/bin/activate 
 
 # set some defaults
@@ -72,10 +74,10 @@ echo "$(date +%Y-%m-%d\ %H:%M:%S) -- using python interpreter: $(which python)"
 filedate="$(date +%Y-%m-%dT%H:%M:%S)"
 
 for i in ${SEQUENCE}; do
-    echo "$(date +%Y-%m-%d\ %H:%M:%S) -- launching experiment ${i} with ${SCRIPT} and ARGS=${ARGS}"
+    echo "$(date +%Y-%m-%d\ %H:%M:%S) -- launching experiment ${i} with ${PY_SCRIPT} and ARGS=${ARGS}"
     # launch the appropriate process 
-    #nohup ${NICE} ${PY} ${SCRIPT} expt_${i} ${ARGS} > log/${filedate}_expt_${i}.log & 
-    nohup ${NICE} python ${PY_SCRIPT} expt_${i} ${ARGS} > log/${filedate}_expt_${i}.log & 
+    #nohup ${NICE} ${PY} ${SCRIPT} expt_${i} ${ARGS} > ${LOGDIR}/${filedate}_expt_${i}.log & 
+    nohup ${NICE} python ${PY_SCRIPT} expt_${i} ${ARGS} > ${LOGDIR}/${filedate}_expt_${i}.log & 
     # note this will also sleep after the last process
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- sleeping for ${SLEEPTIME} seconds"
     sleep ${SLEEPTIME} 
