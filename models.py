@@ -21,8 +21,8 @@ from sklearn.neighbors import KNeighborsClassifier
 try:
     from sklearn.neural_network import MLPClassifier
 except ImportError, e:
-    logging.warn('couldnt import sklearn.neural_network!') 
-    logging.warn('as of the time of writing, this requires a build of the dev release') 
+    logging.info('couldnt import sklearn.neural_network') 
+    logging.info('... as of the time of writing, this requires a build of the dev release (see README)') 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
