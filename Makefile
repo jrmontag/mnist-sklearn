@@ -34,12 +34,10 @@ help:
 
 # run everything in the setup
 demo: $(SAVEDIR)/knn_cv-split_*.pdf 
-#demo: saved_models/knn_cv-split_*.pdf 
 
 
 # example experiment
 $(SAVEDIR)/knn_cv-split_*.pdf: $(DATADIR)/train-images.npy
-#saved_models/knn_cv-split_*.pdf: data/train-images.npy
 	nohup nice bash launch-processes.bash > $(LOGDIR)/$(DATE)_sample-log.nohup.out & 
 	@echo 
 	@echo 'Sample experiments are now running in the background.'  
@@ -49,15 +47,12 @@ $(SAVEDIR)/knn_cv-split_*.pdf: $(DATADIR)/train-images.npy
 
 # binary data ==> npy arrays
 $(DATADIR)/train-images.npy: $(VBIN)/activate $(DATADIR)/original/train-images.gz
-#data/train-images.npy: tmp-venv/bin/activate data/original/train-images.gz
 	. $(VENV)/bin/activate; \
 	python convert-binary-data.py 
 
 
 # local environment
 $(VBIN)/activate: requirements.txt
-#tmp-venv/bin/activate: requirements.txt
-	#test -d $(VENV) || virtualenv $(VENV) 
 	virtualenv -p $(BASE_PY) $(VENV) 
 	. $(VENV)/bin/activate ; \
 	pip install -r $< 
@@ -66,7 +61,6 @@ $(VBIN)/activate: requirements.txt
 
 # additional training data
 expanded: $(DATADIR)/train-images.npy 
-#expanded: data/train-images.npy  
 	test -e data/expanded-train-images.npy || \
 	. $(VENV)/bin/activate ; \
 	python expand-np-arrays.py 
