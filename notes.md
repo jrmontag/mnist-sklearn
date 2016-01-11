@@ -139,7 +139,9 @@ $ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.s
 969 8
 1006 9
 ```
-    - now look at per-count accuracy from scoreboard (data/SWTPF-leaderboard-scores.csv) 
+
+- now look at per-count accuracy from scoreboard (data/SWTPF-leaderboard-scores.csv) 
+
 ```bash
 0.99081633 0 
 0.99030837 1  
@@ -152,7 +154,7 @@ $ tail -n+6 submissions/2015-12-24T18:16:42_Small-Wooded-Treatment-Plant-Fence.s
 0.9599589322 8   
 0.9554013875 9
 ```
-    - and now we can combine them to get the actual count of digits in the leaderboard test set (if we round) 
+- and now we can combine them to get the actual count of digits in the leaderboard test set (if we round) 
 
 ```bash
 $ join SWTPF_counts.csv SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { sum = 0 } { printf "%d %d\n", $1, $2/$3; sum+=$2/$3 } END { printf "\n%d \n", sum }'
@@ -181,23 +183,24 @@ $ join SWTPF_counts.csv SWTPF-leaderboard-scores.csv -1 2 -2 2 | awk 'BEGIN { su
 8 0.098
 9 0.102
 ```
-    - in principal, we can now use the relative prevalence of these to weight the classes in eg the SVC model (want the weights to sum to one)
-    - both SVC and RF support passing the class weights, repurpose the best-performing versions of those
-        - RF: expt 32 (scalded RF) performed best on leaderboard (97.2%)
-            - reuse with weights (45) => ~96.6%, decent
-            - leaderboard score =>  97.1%
-        - SVM: expt 36 (bagged, scaled, gs'd SVM) performed best on leaderboard (97.1%)
-            - reuse with weights (46) => ~95.6%, decent
-            - leaderboard score => 96.4%
-    - submit these as stand-alone models [running now]
-        - relaunched them because they weren't named (overwrite log files)
-        - sent
-    - neither were much higher than the original; don't bother updating VotingClassifier 
+
+- in principal, we can now use the relative prevalence of these to weight the classes in eg the SVC model (want the weights to sum to one)
+- both SVC and RF support passing the class weights, repurpose the best-performing versions of those
+    - RF: expt 32 (scalded RF) performed best on leaderboard (97.2%)
+        - reuse with weights (45) => ~96.6%, decent
+        - leaderboard score =>  97.1%
+    - SVM: expt 36 (bagged, scaled, gs'd SVM) performed best on leaderboard (97.1%)
+        - reuse with weights (46) => ~95.6%, decent
+        - leaderboard score => 96.4%
+- submit these as stand-alone models [running now]
+    - relaunched them because they weren't named (overwrite log files)
+    - sent
+- neither were much higher than the original; don't bother updating VotingClassifier 
 - [x] sklearn's built-in NN (MLPClassifier)
-    - big gridsearch
-    - dang. MLPC only in dev version of scikit 
-        - see if we can create a local virtualenv for that
-        - looks ok, running as expt_47
+- big gridsearch
+- dang. MLPC only in dev version of scikit 
+    - see if we can create a local virtualenv for that
+    - looks ok, running as expt_47
 
 ```bash
 jmontague@data-science-3:~
@@ -231,7 +234,8 @@ jmontague@data-science-3:~/CCC-venv/lib/python2.7/site-packages
 $ ln -s scikit-learn/sklearn sklearn
 ```
 
-    - ran gridsearch on 47 - worked, high of ~94.8%
+- ran gridsearch on 47 - worked, high of ~94.8%
+
 - [x] try again with updated grid based on scores 
         - best alpha was on edge of grid - run again to extend on larger end
         - also didn't think to add extra layers - add that, too: [(50,), (100,), (200,), (50,50), (100,100), (200,200), (50,50,50), (100,100,100), (200,200,200)] 
@@ -242,12 +246,10 @@ $ ln -s scikit-learn/sklearn sklearn
         - look through this more & make next round of GS:
         ``cat log/2015-12-29T03:43:29_expt_48.log | grep for | sort -n -t" " -k6,6``
 
-
-- [] run with larger range of layer sizes and other params 
+- [x] run with larger range of layer sizes and other params 
     - took ~4 hrs for GSCV 
     - best model ~95.8%: {'mlp__hidden_layer_sizes': (1000, 1000), 'mlp__algorithm': 'l-bfgs', 'mlp__alpha': 10.0}
     - convert best to train for submission  (52 - note: out of order bc of earlier long run times 
-
 
 - [x] test other SVM kernels (in particular, poly w/ gs on degree) 
     - running as expt_50 
@@ -296,15 +298,13 @@ $ ln -s scikit-learn/sklearn sklearn
     - [] .submission files 
 - test fresh run-through (git clone => first round of models)  
 - check for typos in readme
-- add notes to readme about getting raw data (from yan's website?) 
-- add ^ to makefile?
 
-- move matrix plotting into utils module (?)
-- make utils.short_name less fragile 
 
 
 # Future work? 
 
+- move matrix plotting into utils module (?)
+- make utils.short_name less fragile 
 - build funcs to read and display example images
 - look at feature importance 
     - http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances_faces.html#example-ensemble-plot-forest-importances-faces-py
