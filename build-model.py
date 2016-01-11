@@ -153,7 +153,11 @@ else:
         # if running an experiment, plot confusion matrix for review 
         # > TODO: move this figure creation into utils <
         logging.info('calculating confusion matrix')
-        sb.heatmap(confusion_matrix(y_test, predictions))
+        try:
+            sb.heatmap(confusion_matrix(y_test, predictions))
+        except RuntimeError, e:
+            logging.warn('plotting error. matplotlib backend may need to be changed (see readme). error={}'.format(e))
+            logging.warn('plot may still have been saved, and model has already been saved to disk.')
         try:
             plt.title(model_name + ' [expt] ({:.2f}%)'.format(scores.mean()*100))
         except NameError:
