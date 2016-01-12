@@ -18,7 +18,7 @@ Given the small size of the data and how much I :heart: ``scikit-learn``, I chos
 $ git clone <this repo>
 $ cd mnist-sklearn
 $ make demo 
-$ open log/*.pdf
+$ open saved_models/*.pdf
 ```
 
 \*the prerequisites for using this code are having Python 2.7 (yeah, I know it's old), ``make``, and ``virtualenv`` installed. Your machine likely has ``make`` installed already. If needed, you can ``sudo pip install virtualenv``. 
