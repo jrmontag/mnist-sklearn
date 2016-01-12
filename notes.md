@@ -1,11 +1,12 @@
-# CCC, 2015 edition
+# CCC notes, 2015 edition
 
-**Note: This is a clean-up in-progress** 
+These are the notes that I was keeping while working through the development of this code. For posterity's sake, I decided to keep them attached to the repo. Enjoy the walk through my thought process! 
 
 -----------
 
-2015-12-16, kick-off meeting to review project definition
+## kick-off meeting 
 
+- review project definition
 - submission format (see "random" example, too): 
 
     <team name, make this consistent across all submissions. This will appear in the leader board.>
@@ -13,7 +14,7 @@
     <submission name-anything you want. This will appear in the leader board.>
 
 
-# outline 
+## outline 
 
 - [x] read some scikit examples 
 - [x] copy the given images code into lab, create numpy arrays 
@@ -96,7 +97,7 @@
 
 
 - [x] set up baggingclassifier with each of the three best as base
-    - if the 'pl' is BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py?? 
+    - if the 'pl' is BaggingClassifier(Pipeline()), need to update e.g. utils.name() anything in run-experiment.py? 
         - seems like the baggingclassifier params could also be gridsearched
     - running all in parallel seems too much for # of cores... increase stagger
         - bagging kNN didn't finish. 
@@ -279,7 +280,7 @@ $ ln -s scikit-learn/sklearn sklearn
         
 
 
-# other ideas
+## other ideas
 
 - scikit-neuralnetwork
 - tpot
@@ -287,21 +288,9 @@ $ ln -s scikit-learn/sklearn sklearn
 - nolearn
 - tensorflow 
 
-------------
-
-# TODO
-
-- modify Makefile targets 
-    - [x] build venv
-        - this seems messy... scipy and sklearn seem to have failed and are being built from source because of an issue with the numpy install? 
-    - [x] .npy files 
-    - [] .submission files 
-- test fresh run-through (git clone => first round of models)  
-- check for typos in readme
 
 
-
-# Future work? 
+## Future work? 
 
 - don't instantiate estimators in ``models.py``, wait until they're used in main script 
 - move matrix plotting into utils module (?)
