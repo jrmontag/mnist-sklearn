@@ -8,10 +8,12 @@ import fileinput
 import logging
 import numpy as np
 import struct
+import sys
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', 
-                    #level=logging.DEBUG
-                    level=logging.INFO
+                    #level=logging.DEBUG,
+                    level=logging.INFO,
+                    stream=sys.stdout 
                     )
 
 
