@@ -16,7 +16,7 @@ model_logr.setLevel(logging.DEBUG)
 model_sh = logging.StreamHandler(stream=sys.stdout)
 formatter = logging.Formatter('%(asctime)s : %(name)s : %(levelname)s : %(message)s')
 model_sh.setFormatter(formatter)
-model_logr.addHandler(sh)
+model_logr.addHandler(model_sh)
 
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
