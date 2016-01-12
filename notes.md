@@ -303,6 +303,7 @@ $ ln -s scikit-learn/sklearn sklearn
 
 # Future work? 
 
+- don't instantiate estimators in ``models.py``, wait until they're used in main script 
 - move matrix plotting into utils module (?)
 - make utils.short_name less fragile 
 - build funcs to read and display example images

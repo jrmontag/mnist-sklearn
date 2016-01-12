@@ -19,10 +19,24 @@ I think most of this code should work out of the box with Python 2.7 on OS X and
 $ git clone <this repo>
 $ cd mnist-sklearn
 $ make demo 
+$ open log/*.pdf
 ```
 
-While I did test this a few different ways, I can't guarantee it'll work seamlessly! Feel free to poke around in the ``Makefile`` to see what is intended. For more words about the context and workflow, you can read [my longer post](http://www.joshmontague.com/). 
+While I did test this a few different ways, I can't guarantee it'll work seamlessly! Feel free to poke around in the ``Makefile`` to see what is intended. 
 
+For more standard usage, the designed approach is to add new Pipelines to ``models.py`` (with accompanying descriptions and names, used in file-nameing conventions). Then, update the ``SEQUENCE`` variable in ``launch-processes.bash`` - either using a single value, or a range via ``seq``. Each "experiment" (as the ``expt_*`` convention was intended), will create a new log file and all logs from a single use of ``launch-process.bash`` will share a timestamp for ease of separating your trials. 
+
+Since some of the models can take minutes to hours to run, the recommended syntax is something like:
+
+```bash
+$ nohup bash launch-processes.bash > log/2016-01-12_expt-4-12.nohup.log &  
+``` 
+
+This will let you disconnect from the session while things are still running, and also log (in the nohup log) any unexpected exceptions that crash your code.  
+
+Given the relatively small size of data, most of these models seem to be CPU bound. For optimal iteration time (and fun of watching ``htop``), a high-CPU-count server is the best approach. Go ask AWS for something from the C3 or C4 family of EC2 instances.  
+
+Questions? [Let me know](https://www.twitter.com/jrmontag)! Otherwise, enjoy your classifying! For more words about the context and workflow, you can read [my longer post](http://www.joshmontague.com/). 
 
 -----
 
