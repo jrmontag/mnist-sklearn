@@ -10,6 +10,15 @@ import logging
 import numpy as np
 import sys
 
+# set up a logger, at least for the ImportError 
+model_logr = logging.getLogger(__name__)
+model_logr.setLevel(logging.DEBUG)
+model_sh = logging.StreamHandler(stream=sys.stdout)
+formatter = logging.Formatter('%(asctime)s : %(name)s : %(levelname)s : %(message)s')
+model_sh.setFormatter(formatter)
+model_logr.addHandler(sh)
+
+
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier, RandomForestClassifier, VotingClassifier 
@@ -21,8 +30,8 @@ from sklearn.neighbors import KNeighborsClassifier
 try:
     from sklearn.neural_network import MLPClassifier
 except ImportError, e:
-    logging.info('couldnt import sklearn.neural_network') 
-    logging.info('... as of the time of writing, this requires a build of the dev release (see README)') 
+    model_logr.info('couldnt import sklearn.neural_network') 
+    model_logr.info('... as of the time of writing, this requires a build of the dev release (see README)') 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
