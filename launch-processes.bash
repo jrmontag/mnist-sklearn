@@ -6,7 +6,7 @@
 
 ####################  config  #############################
 # range of experiments to run 
-SEQUENCE=`seq 1 2`
+SEQUENCE=`seq 1 3`
 #SEQUENCE=42
 
 # are we doing a cv split ("experiment")? (vs. train and predict on test) 
@@ -19,7 +19,7 @@ SERVER=true
 EXPANDED=false
 
 # stagger the workload (seconds)
-SLEEPTIME=60
+SLEEPTIME=10
 # 60 = 1 min
 # 300 = 5 min
 # 600 = 10 min
@@ -48,11 +48,9 @@ NICE="nice -n10"
 #   use convenient strings
 # http://stackoverflow.com/a/21210966/1851811
 if [ "${EXPERIMENT}" = true ]; then
-    #SCRIPT=run-experiment.py
     # be polite 
     NICE="nice -n15"
 else
-    #SCRIPT=full-train-and-predict.py
     # be slightly less polite 
     NICE="nice -n5"
     ARGS="${ARGS} --submission"
@@ -76,8 +74,8 @@ filedate="$(date +%Y-%m-%dT%H:%M:%S)"
 for i in ${SEQUENCE}; do
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- launching experiment ${i} with ${PY_SCRIPT} and ARGS=${ARGS}"
     # launch the appropriate process 
-    #nohup ${NICE} ${PY} ${SCRIPT} expt_${i} ${ARGS} > ${LOGDIR}/${filedate}_expt_${i}.log & 
-    nohup ${NICE} python ${PY_SCRIPT} expt_${i} ${ARGS} > ${LOGDIR}/${filedate}_expt_${i}.log & 
+    #   - run this bash script w/ nohup & all of the python procs will inherit it 
+    ${NICE} python ${PY_SCRIPT} expt_${i} ${ARGS} > ${LOGDIR}/${filedate}_expt_${i}.log & 
     # note this will also sleep after the last process
     echo "$(date +%Y-%m-%d\ %H:%M:%S) -- sleeping for ${SLEEPTIME} seconds"
     sleep ${SLEEPTIME} 
