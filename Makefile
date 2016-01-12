@@ -59,20 +59,19 @@ $(VBIN)/activate: requirements.txt
 	touch $(VENV)/bin/activate
 
 
-# additional training data
-expanded: $(DATADIR)/train-images.npy 
-	test -e data/expanded-train-images.npy || \
-	. $(VENV)/bin/activate ; \
-	python expand-np-arrays.py 
-	touch $<
-
-
 # download binary data from web
 $(DATADIR)/original/train-images.gz: 
 	curl http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz -o data/original/train-images.gz & 
 	curl http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz -o data/original/train-labels.gz & 
 	curl http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz -o data/original/test-images.gz  
 
+
+# additional training data
+expanded: $(DATADIR)/train-images.npy 
+	test -e data/expanded-train-images.npy || \
+	. $(VENV)/bin/activate ; \
+	python expand-np-arrays.py 
+	touch $<
 
 
 # !!! delete all generated npy arrays !!! 
