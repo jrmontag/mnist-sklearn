@@ -20,7 +20,6 @@ Given the small size of the data and how much I :heart: ``scikit-learn``, I chos
 $ git clone <this repo>
 $ cd mnist-sklearn
 $ make demo 
-$ open saved_models/*.pdf
 ```
 
 \*the prerequisites for using this code are having Python 2.7 (yeah, I know it's old), ``make``, and ``virtualenv`` installed. Your machine likely has ``make`` installed already. If needed, you can ``sudo pip install virtualenv``. 
@@ -32,7 +31,8 @@ The ``make demo`` command will do the following things:
 - use ``virtualenv`` to create an isolated Python environment in this directory (and install all the necessary libraries) 
 - download the raw binary data from [Yann LeCun's website](http://yann.lecun.com/exdb/mnist/) (about 10 MB) 
 - convert those binary files to ``numpy`` arrays and write them to disk (about 400 MB) 
-- start a set of sample model runs in the background 
+- start a set of sample model runs 
+- display the confusion matrices from the best cross-validation model 
 
 The one-time environment setup may take a few minutes. The three sample models are staggered by the ``bash`` script and should be done in about 45 seconds. You can look at the data in ``log/`` to see what's going on, and look in ``saved_models/`` to see both the serialized models and per-model confusion matrices. 
 
