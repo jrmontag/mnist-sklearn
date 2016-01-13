@@ -4,6 +4,8 @@ This code was developed for a intra-team Kaggle-like modeling competition on the
 
 We were given the training images and labels, the test images, and a simple Python script that read (and "displayed") the binary image data (also included here: ``images.py``). We had two weeks to submit any number of prediction files for the test images, one prediction per line. My highest accuracy model ([#42](https://github.com/jrmontag/mnist-sklearn/blob/master/models.py#L419)) scored 98.18% with no feature engineering. The same model with a minor amount of feature engineering ("added samples" [via image translation](https://github.com/jrmontag/mnist-sklearn/blob/master/expand-np-arrays.py)) scored a 98.68% and was my highest score. 
 
+![Model #42 confusion matrix (original data)](data/expt_42.jpg "Model #42 confusion matrix (original data)")
+
 The rules were pretty simple: 
 
 - write code in whatever language you want
