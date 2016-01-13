@@ -13,6 +13,15 @@ import os
 import sys
 
 
+# set up a logger
+util_logr = logging.getLogger(__name__)
+util_logr.setLevel(logging.DEBUG)
+util_sh = logging.StreamHandler(stream=sys.stdout)
+formatter = logging.Formatter('%(asctime)s : %(name)s : %(levelname)s : %(message)s')
+util_sh.setFormatter(formatter)
+util_logr.addHandler(util_sh)
+
+
 def short_name(model):
     """Return a simplified name for this model. A bit brittle."""
     # for a single model, this will work
@@ -32,10 +41,10 @@ def short_name(model):
             # bagging
             name = 'bag_' + short_name(model.base_estimator)
     except AttributeError, e:
-        logging.info('utils.short_name() couldnt generate quality name')
+        util_logr.info('utils.short_name() couldnt generate quality name')
         # for a single model, this will work
         name = model.__class__.__name__
-        logging.info('falling back to generic name={}'.format(name))
+        util_logr.info('falling back to generic name={}'.format(name))
     return name 
 
 
