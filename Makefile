@@ -38,11 +38,14 @@ demo: $(SAVEDIR)/knn_cv-split_*.pdf
 
 # example experiment
 $(SAVEDIR)/knn_cv-split_*.pdf: $(DATADIR)/train-images.npy
-	nohup nice bash launch-processes.bash > $(LOGDIR)/$(DATE)_sample-log.nohup.out & 
 	@echo 
-	@echo 'Sample experiments are now running in the background.'  
-	@echo '... use `tail -f (sample-log) to view overall progress.'  
-	@echo '... or use `tail -f (individual logfile) to view individual model progress.'  
+	@echo 'Sample experiments will now run for ~45 seconds. The corresponding '  
+	@echo ' log file swill be available in log/ afterward.'  
+	@echo 
+	@echo 'When complete, cross-validation confusion matrices will open' 
+	@echo ' automatically.' 
+	nohup nice bash launch-processes.bash > $(LOGDIR)/$(DATE)_sample-log.nohup.out 
+	open $(SAVEDIR)/*.pdf 
 
 
 # binary data ==> npy arrays
