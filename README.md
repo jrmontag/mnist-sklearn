@@ -1,6 +1,6 @@
 # MNIST + ``scikit-learn`` = :star2: 
 
-This code was developed for a intra-team Kaggle-like modeling competition on the canonical [MNIST handwritten digits dataset](https://en.wikipedia.org/wiki/MNIST_database).  
+This code was developed for a intra-team Kaggle-like modeling competition on the canonical [MNIST handwritten digits dataset](https://en.wikipedia.org/wiki/MNIST_database). For more narrative on the approach and process, [you can read this article.](http://joshmontague.com/posts/2016/mnist-scikit-learn/) 
 
 We were given the training images and labels, the test images, and a simple Python script that read (and "displayed") the binary image data (also included here: ``images.py``). We had two weeks to submit any number of prediction files for the test images, one prediction per line. My highest accuracy model ([#42](https://github.com/jrmontag/mnist-sklearn/blob/master/models.py#L419)) scored 98.18% with no feature engineering. The same model with a minor amount of feature engineering ("added samples" [via image translation](https://github.com/jrmontag/mnist-sklearn/blob/master/expand-np-arrays.py)) scored a 98.68% and was my highest score. 
 
